@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "A4IvHdbTrMx1G2gTY4hBUgx1NHuQiYoy1dEG028xoPk=",
+  "Source": "sell_movie",
+  "BasePath": "_content/sell_movie",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}

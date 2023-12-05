@@ -25,7 +25,6 @@
 
   <ItemGroup>
     <Folder Include="Enities\" />
-    <Folder Include="Filters\" />
     <Folder Include="Models\" />
   </ItemGroup>
 

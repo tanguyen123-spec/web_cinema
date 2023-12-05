@@ -8,7 +8,7 @@ using AutoMapper;
 using sell_movie.Models;
 using Sell_movie_ticket.Repository;
 using Sell_movie_ticket.Services;
-
+using sell_movie.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
@@ -29,12 +29,16 @@ builder.Services.AddCors(options =>
 // Add services to the container.
 builder.Services.AddControllers(options =>
 {
-    
+    options.Filters.Add(new MyFilterAtribute("Global"));
+    options.Filters.Add(new MyFilterResourceFilter("Global"));
+    options.Filters.AddService<MyFilterResultFilterAttribute>();
+
+
 });
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddDbContext<web_cinema3Context>();
-
+builder.Services.AddTransient<MyFilterResultFilterAttribute>();
 //---------------------------------------------------
 // Đăng ký IGiaVeRepository và GiaVeRepository
 builder.Services.AddScoped<IGiaveRepository, GiaveRepository>();

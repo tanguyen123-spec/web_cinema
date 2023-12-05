@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-
+using sell_movie.Filters;
 using sell_movie.Models;
 using sell_movie.Services;
 using System;
@@ -9,6 +9,9 @@ namespace sell_movie.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [MyAsyncFilterAtribute("Controller")]
+
+
     public class CtdatveController : ControllerBase
     {
         private readonly ICtdatveService _ctdatveService;
@@ -19,7 +22,9 @@ namespace sell_movie.Controllers
         }
 
         [HttpGet]
-       
+        [MyFilterAtribute("Action",-10)]
+        [MyFilterResourceFilter("Action")]
+
         public async Task<IActionResult> GetAll()
         {
             Console.Write("The action is being executed");

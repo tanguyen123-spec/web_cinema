@@ -1,115 +1,67 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using sell_movie.Models;
-using sell_movie.Services;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using sell_movie.Enities;
+using sell_movie.Models;
+using sell_movie.Services;
 
-namespace sell_movie.Controllers
+[Route("api/[controller]")]
+[ApiController]
+public class PhongController : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class PhongController : ControllerBase
+    private readonly PhongServices _services;
+
+    public PhongController(PhongServices services)
     {
-        private readonly IPhongServices _phongService;
+        _services = services ?? throw new ArgumentNullException(nameof(services));
+    }
 
-        public PhongController(IPhongServices phongService)
-        {
-            _phongService = phongService;
-        }
+    [HttpGet]
+    public async Task<IActionResult> GetAll()
+    {
+        var phongs = await _services.GetAll();
+        return Ok(phongs);
+    }
 
-        [HttpGet]
-        public async Task<IActionResult> GetAllPhong()
+    [HttpGet("get-by-id/{id}")]
+    public async Task<IActionResult> GetById(string id)
+    {
+        var phong = await _services.GetById(id);
+        if (phong == null)
         {
-            try
-            {
-                var phongs = await _phongService.GetAll();
-                return Ok(phongs);
-            }
-            catch (Exception ex)
-            {
-                // Xử lý lỗi và trả về lỗi nếu cần
-                return StatusCode(500, ex.Message);
-            }
+            return BadRequest("Phòng không tồn tại!");
         }
+        return Ok(phong);
+    }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetPhongById(string id)
+   
+    [HttpPost("add-ghe")]
+    public async Task<IActionResult> CreateGheByPhong(PhongModels phong)
+    {
+        if (phong == null)
         {
-            try
-            {
-                var phong = await _phongService.GetById(id);
-                if (phong == null)
-                {
-                    return NotFound();
-                }
-                return Ok(phong);
-            }
-            catch (Exception ex)
-            {
-                // Xử lý lỗi và trả về lỗi nếu cần
-                return StatusCode(500, ex.Message);
-            }
-        }
+            return BadRequest();
+        }    
+        await _services.CustomCreate(phong);
+        return Ok(phong);
+    }
 
-        [HttpPost]
-        public async Task<IActionResult> AddPhong(PhongModels phong)
+    [HttpPut("{id}")]
+    public async Task<IActionResult> Edit(string id, Phong phong)
+    {
+        if (phong != null)
         {
-            try
-            {
-                await _phongService.Add(phong);
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                // Xử lý lỗi và trả về lỗi nếu cần
-                return StatusCode(500, ex.Message);
-            }
+            await _services.Update(id, phong);
+            return Ok();
         }
+        return BadRequest("Chưa chỉnh sửa được!");
+    }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdatePhong(string id, PhongModels phong)
-        {
-            try
-            {
-                await _phongService.Update(id, phong);
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                // Xử lý lỗi và trả về lỗi nếu cần
-                return StatusCode(500, ex.Message);
-            }
-        }
-
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeletePhong(string id)
-        {
-            try
-            {
-                await _phongService.Delete(id);
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                // Xử lý lỗi và trả về lỗi nếu cần
-                return StatusCode(500, ex.Message);
-            }
-        }
-
-        [HttpPost("AddGheByPhong")]
-        public async Task<IActionResult> AddGheByPhong(PhongModels phong)
-        {
-            try
-            {
-                await _phongService.AddGheByPhong(phong);
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                // Xử lý lỗi và trả về lỗi nếu cần
-                return StatusCode(500, ex.Message);
-            }
-        }
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete(string id)
+    {
+        await _services.Delete(id);
+        return NoContent();
     }
 }

@@ -31,7 +31,7 @@ namespace sell_movie.Enities
         public virtual DbSet<KhachhangModels> KhachhangModels { get; set; } = null!;
 
         public virtual DbSet<Lichchieu> Lichchieus { get; set; } = null!;
-        public virtual DbSet<LichchieuModels> LichChieuModels { get; set; } = null!;
+        public virtual DbSet<LichChieuModels> LichChieuModels { get; set; } = null!;
 
         public virtual DbSet<Lichchieuphim> Lichchieuphims { get; set; } = null!;
         public virtual DbSet<LichchieuphimModels> LichchieuphimModels { get; set; } = null!;
@@ -48,7 +48,7 @@ namespace sell_movie.Enities
         public virtual DbSet<Phong> Phongs { get; set; } = null!;
         public virtual DbSet<PhongModels> PhongModels { get; set; } = null!;
 
-        public virtual DbSet<Quocgium> Quocgia { get; set; } = null!;
+        public virtual DbSet<Quocgium> Quocgium { get; set; } = null!;
         public virtual DbSet<QuocGiaModels> QuocGiaModels { get; set; } = null!;
 
         public virtual DbSet<Tdkhachhang> Tdkhachhangs { get; set; } = null!;
@@ -87,7 +87,7 @@ namespace sell_movie.Enities
            .HasKey(e => e.MaGiaVe);
             modelBuilder.Entity<KhachhangModels>()
                 .HasKey(e => e.Makhachhang);
-            modelBuilder.Entity<LichchieuModels>()
+            modelBuilder.Entity<LichChieuModels>()
                  .HasKey(e => e.MaLichChieu);
             modelBuilder.Entity<LichchieuphimModels>()
                 .HasKey(e => e.MaLichPhim);

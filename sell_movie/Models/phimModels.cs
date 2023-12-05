@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace sell_movie.Models
+﻿namespace sell_movie.Models
 {
-    public partial class PhimModels
+    public class PhimModels
     {
-      
         public string MaPhim { get; set; } = null!;
         public string TenPhim { get; set; } = null!;
         public DateTime Ngaykhoichieu { get; set; }
@@ -16,7 +12,5 @@ namespace sell_movie.Models
         public string MaQuocGia { get; set; } = null!;
         public string Banner { get; set; } = null!;
         public int Thoiluong { get; set; }
-
-      
     }
 }

@@ -1,59 +1,89 @@
-﻿using sell_movie.Enities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
+using sell_movie.Enities;
+using sell_movie.Models;
+
 
 namespace sell_movie.Repository
 {
-    public interface ILichchieuRepository
+    public class LichChieuRepository : IRepository<LichChieuModels>
     {
-        IEnumerable<Lichchieu> GetAll();
-        Lichchieu GetById(string id);
-        void Add(Lichchieu lichchieu);
-        void Update(Lichchieu lichchieu);
-        void Delete(string id);
-    }
+        private readonly web_cinema3Context _context;
 
-    public class LichchieuRepository : ILichchieuRepository
-    {
-        private readonly List<Lichchieu> _lichchieuList;
-
-        public LichchieuRepository()
+        public LichChieuRepository(web_cinema3Context context)
         {
-            _lichchieuList = new List<Lichchieu>();
+            _context = context;
         }
 
-        public IEnumerable<Lichchieu> GetAll()
+        public async Task<IEnumerable<LichChieuModels>> GetAll()
         {
-            return _lichchieuList;
-        }
-
-        public Lichchieu GetById(string id)
-        {
-            return _lichchieuList.FirstOrDefault(l => l.MaLichChieu == id);
-        }
-
-        public void Add(Lichchieu lichchieu)
-        {
-            _lichchieuList.Add(lichchieu);
-        }
-
-        public void Update(Lichchieu lichchieu)
-        {
-            var existingLichchieu = _lichchieuList.FirstOrDefault(l => l.MaLichChieu == lichchieu.MaLichChieu);
-            if (existingLichchieu != null)
+            var lichchieus = await _context.Lichchieus.ToListAsync();
+            return lichchieus.Select(lichchieu => new LichChieuModels
             {
-                existingLichchieu.NgayChieu = lichchieu.NgayChieu;
-                existingLichchieu.GioChieu = lichchieu.GioChieu;
+                MaLichChieu = lichchieu.MaLichChieu,
+                NgayChieu = lichchieu.NgayChieu,
+
+                // Chuyển đổi TimeSpan thành giờ và phút
+                GioChieuHour = lichchieu.GioChieu.Hours,
+                GioChieuMinute = lichchieu.GioChieu.Minutes
+            });
+        }
+
+        public async Task<LichChieuModels> GetById(string id)
+        {
+            var lichchieu = await _context.Lichchieus.FindAsync(id);
+            if (lichchieu != null)
+            {
+                return new LichChieuModels
+                {
+                    MaLichChieu = lichchieu.MaLichChieu,
+                    NgayChieu = lichchieu.NgayChieu,
+
+                    // Chuyển đổi TimeSpan thành giờ và phút
+                    GioChieuHour = lichchieu.GioChieu.Hours,
+                    GioChieuMinute = lichchieu.GioChieu.Minutes
+                };
+            }
+            return null;
+        }
+
+        public async Task Create(LichChieuModels entity)
+        {
+            var lichchieu = new Lichchieu
+            {
+                MaLichChieu = entity.MaLichChieu,
+                NgayChieu = entity.NgayChieu,
+
+                // Tạo TimeSpan từ giờ và phút
+                GioChieu = new TimeSpan(entity.GioChieuHour, entity.GioChieuMinute, 0)
+            };
+
+            _context.Lichchieus.Add(lichchieu);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task Update(string id, LichChieuModels entity)
+        {
+            var lichchieu = await _context.Lichchieus.FindAsync(id);
+            if (lichchieu != null)
+            {
+                lichchieu.MaLichChieu = entity.MaLichChieu;
+                lichchieu.NgayChieu = entity.NgayChieu;
+
+                // Cập nhật TimeSpan từ giờ và phút mới
+                lichchieu.GioChieu = new TimeSpan(entity.GioChieuHour, entity.GioChieuMinute, 0);
+
+                await _context.SaveChangesAsync();
             }
         }
 
-        public void Delete(string id)
+        public async Task Delete(string id)
         {
-            var lichchieu = _lichchieuList.FirstOrDefault(l => l.MaLichChieu == id);
+            var lichchieu = await _context.Lichchieus.FindAsync(id);
             if (lichchieu != null)
             {
-                _lichchieuList.Remove(lichchieu);
+                _context.Lichchieus.Remove(lichchieu);
+                await _context.SaveChangesAsync();
             }
         }
     }

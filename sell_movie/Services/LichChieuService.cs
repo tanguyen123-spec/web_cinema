@@ -1,59 +1,51 @@
-﻿using AutoMapper;
-using sell_movie.Enities;
-using sell_movie.Models;
+﻿using System.Collections.Generic;
 using sell_movie.Repository;
-using System;
-using System.Collections.Generic;
+using sell_movie.Models;
+ 
 
 namespace sell_movie.Services
 {
-    public interface ILichchieuService
+    public interface ILichChieuService
     {
-        IEnumerable<LichchieuModels> GetAllLichchieu();
-        LichchieuModels GetLichchieuById(string id);
-        void AddLichchieu(LichchieuModels lichchieu);
-        void UpdateLichchieu(LichchieuModels lichchieu);
-        void DeleteLichchieu(string id);
+        Task<IEnumerable<LichChieuModels>> GetAll();
+        Task<LichChieuModels> GetById(string id);
+        Task Add(LichChieuModels lichchieu);
+        Task Update(string id, LichChieuModels lichchieu);
+        Task Delete(string id);
     }
 
-    public class LichchieuService : ILichchieuService
+    public class LichChieuService : ILichChieuService
     {
-        private readonly ILichchieuRepository _lichchieuRepository;
-        private readonly IMapper _mapper;
+        private readonly IRepository<LichChieuModels> _lichChieuRepository;
 
-        public LichchieuService(ILichchieuRepository lichchieuRepository, IMapper mapper)
+        public LichChieuService(IRepository<LichChieuModels> lichChieuRepository)
         {
-            _lichchieuRepository = lichchieuRepository;
-            _mapper = mapper;
+            _lichChieuRepository = lichChieuRepository;
         }
 
-        public IEnumerable<LichchieuModels> GetAllLichchieu()
+        public async Task<IEnumerable<LichChieuModels>> GetAll()
         {
-            var lichchieus = _lichchieuRepository.GetAll();
-            return _mapper.Map<IEnumerable<LichchieuModels>>(lichchieus);
+            return await _lichChieuRepository.GetAll();
         }
 
-        public LichchieuModels GetLichchieuById(string id)
+        public async Task<LichChieuModels> GetById(string id)
         {
-            var lichchieu = _lichchieuRepository.GetById(id);
-            return _mapper.Map<LichchieuModels>(lichchieu);
+            return await _lichChieuRepository.GetById(id);
         }
 
-        public void AddLichchieu(LichchieuModels lichchieu)
+        public async Task Add(LichChieuModels lichchieu)
         {
-            var lichchieuEntity = _mapper.Map<Lichchieu>(lichchieu);
-            _lichchieuRepository.Add(lichchieuEntity);
+            await _lichChieuRepository.Create(lichchieu);
         }
 
-        public void UpdateLichchieu(LichchieuModels lichchieu)
+        public async Task Update(string id, LichChieuModels lichchieu)
         {
-            var lichchieuEntity = _mapper.Map<Lichchieu>(lichchieu);
-            _lichchieuRepository.Update(lichchieuEntity);
+            await _lichChieuRepository.Update(id, lichchieu);
         }
 
-        public void DeleteLichchieu(string id)
+        public async Task Delete(string id)
         {
-            _lichchieuRepository.Delete(id);
+            await _lichChieuRepository.Delete(id);
         }
     }
 }

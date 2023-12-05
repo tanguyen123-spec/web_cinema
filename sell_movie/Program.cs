@@ -6,6 +6,9 @@ using sell_movie.Services;
 using AutoMapper;
 
 using sell_movie.Models;
+using Sell_movie_ticket.Repository;
+using Sell_movie_ticket.Services;
+
 
 var builder = WebApplication.CreateBuilder(args);
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
@@ -16,19 +19,22 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: MyAllowSpecificOrigins,
                       policy =>
                       {
-                          policy.WithOrigins("http://localhost:52107",
-                                              "http://localhost:52107");
+                          policy.WithOrigins("http://localhost:4200",
+                                              "http://localhost:4200");
                           policy.AllowAnyHeader();
                           policy.AllowAnyMethod();
 
                       });
 });
 // Add services to the container.
-
-builder.Services.AddControllers();
+builder.Services.AddControllers(options =>
+{
+    
+});
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddDbContext<web_cinema3Context>();
+
 //---------------------------------------------------
 // Đăng ký IGiaVeRepository và GiaVeRepository
 builder.Services.AddScoped<IGiaveRepository, GiaveRepository>();
@@ -45,9 +51,34 @@ builder.Services.AddScoped<ITtDatVeServices,TtDatVeServices>();
 builder.Services.AddScoped<IRepository<LichchieuphimModels>, LichChieuPhimRepository>();
 builder.Services.AddScoped<ILichChieuPhimServices, LichChieuPhimServices>();
 builder.Services.AddScoped<IRepository<PhongModels>, PhongRepository>();
-builder.Services.AddScoped<IPhongServices, PhongServices>();
-builder.Services.AddScoped<ILichchieuRepository,LichchieuRepository>();
-builder.Services.AddScoped<ILichchieuService, LichchieuService>();
+builder.Services.AddScoped< PhongServices>();
+builder.Services.AddScoped<IRepository<LichChieuModels>,LichChieuRepository>();
+builder.Services.AddScoped<ILichChieuService, LichChieuService>();
+builder.Services.AddScoped<IGheServices, GheService>();
+builder.Services.AddScoped<IRepository<GheModels>, GheRepository>();
+
+builder.Services.AddScoped< ITdKhachHangService,TdKhachHangService>();
+builder.Services.AddScoped<MyRepository<Tdkhachhang>>();
+
+
+builder.Services.AddScoped<MyRepository<TrangThaiGheModels>>();
+builder.Services.AddScoped<IThanhtoanRepository, ThanhtoanRepository>();
+builder.Services.AddScoped<IRepository<PhimModels>, PhimRepository>();
+builder.Services.AddScoped<IRepository<NhanvienModels>, NhanvienRepository>();
+//-----
+builder.Services.AddScoped<IQuocGiaRepository, QuocGiaRepository>();
+builder.Services.AddScoped<IQuocGiaService, QuocGiaService>();
+builder.Services.AddScoped<IRepository<NguoidungModels>, NguoidungRepository>();
+builder.Services.AddScoped<INguoidungService, NguoidungService>();
+builder.Services.AddScoped<IQuocGiaService, QuocGiaService>();
+builder.Services.AddAutoMapper(typeof(QuocGiaService));
+builder.Services.AddScoped<IThanhtoanService, ThanhtoanService>();
+builder.Services.AddScoped<IPhimService, PhimService>();
+builder.Services.AddScoped<INhanvienService, NhanvienService>();
+
+
+
+
 //---------------------------------------------------------
 // Đăng ký repository
 builder.Services.AddScoped<IKhachhangRepository, KhachhangRepository>();

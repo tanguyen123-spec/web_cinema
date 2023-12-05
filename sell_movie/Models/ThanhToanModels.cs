@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace sell_movie.Models
+﻿namespace sell_movie.Models
 {
-    public partial class ThanhToanModels
+    public class ThanhToanModels
     {
         public string MaThanhToan { get; set; } = null!;
         public int MaDatVe { get; set; }

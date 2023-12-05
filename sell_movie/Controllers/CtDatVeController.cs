@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+
 using sell_movie.Models;
 using sell_movie.Services;
 using System;
@@ -18,8 +19,10 @@ namespace sell_movie.Controllers
         }
 
         [HttpGet]
+       
         public async Task<IActionResult> GetAll()
         {
+            Console.Write("The action is being executed");
             try
             {
                 var ctdatves = await _ctdatveService.GetAll();

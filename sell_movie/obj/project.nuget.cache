@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "z0te5I1C/U3DjnW5V+cNj3JRkiWEIAsvcH9jglBcQMrygej6cvheVVl51rgU+KT5LmmsBrta8/KIxcEbQogQJw==",
+  "dgSpecHash": "zv2haLrdBBpP+mm9jr2IfI5bwL5mF8z3MSsULAV991TbyRrmVdo5FDkWSntaH5+XXZgZvNxYRboUwlicNmENIg==",
   "success": true,
   "projectFilePath": "C:\\Users\\Xin chao Duy Tan\\Desktop\\web_movie\\sell_movie\\sell_movie\\sell_movie.csproj",
   "expectedPackageFiles": [
@@ -93,6 +93,7 @@
     "C:\\Users\\Xin chao Duy Tan\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\6.0.0\\microsoft.extensions.dependencyinjection.abstractions.6.0.0.nupkg.sha512",
     "C:\\Users\\Xin chao Duy Tan\\.nuget\\packages\\microsoft.extensions.logging\\6.0.0\\microsoft.extensions.logging.6.0.0.nupkg.sha512",
     "C:\\Users\\Xin chao Duy Tan\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\6.0.0\\microsoft.extensions.logging.abstractions.6.0.0.nupkg.sha512",
+    "C:\\Users\\Xin chao Duy Tan\\.nuget\\packages\\microsoft.extensions.logging.filter\\1.1.2\\microsoft.extensions.logging.filter.1.1.2.nupkg.sha512",
     "C:\\Users\\Xin chao Duy Tan\\.nuget\\packages\\microsoft.extensions.options\\6.0.0\\microsoft.extensions.options.6.0.0.nupkg.sha512",
     "C:\\Users\\Xin chao Duy Tan\\.nuget\\packages\\microsoft.extensions.primitives\\6.0.0\\microsoft.extensions.primitives.6.0.0.nupkg.sha512",
     "C:\\Users\\Xin chao Duy Tan\\.nuget\\packages\\microsoft.identity.client\\4.21.1\\microsoft.identity.client.4.21.1.nupkg.sha512",

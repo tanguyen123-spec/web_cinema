@@ -1,7 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using sell_movie.Entities;
 using sell_movie.Models;
 using sell_movie.Services;
-using System.Threading.Tasks;
 
 namespace sell_movie.Controllers
 {
@@ -9,53 +10,74 @@ namespace sell_movie.Controllers
     [ApiController]
     public class TrangThaiGheController : ControllerBase
     {
-        private readonly ITrangThaiGheService _trangThaiGheService;
-
-        public TrangThaiGheController(ITrangThaiGheService trangThaiGheService)
+        private readonly TrangThaiGheServices _services;
+        public TrangThaiGheController(TrangThaiGheServices services)
         {
-            _trangThaiGheService = trangThaiGheService;
+            _services = services;
         }
 
-        // GET: api/TrangThaiGhe
         [HttpGet]
-        public async Task<IActionResult> GetAllTrangThaiGhes()
+        public async Task<IActionResult> GetAll()
         {
-            var trangThaiGhes = await _trangThaiGheService.GetAllTrangThaiGhes();
-            return Ok(trangThaiGhes);
-        }
-
-        // GET: api/TrangThaiGhe/{id}
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetTrangThaiGheById(string id)
-        {
-            var trangThaiGhe = await _trangThaiGheService.GetTrangThaiGheById(id);
-            if (trangThaiGhe == null)
+            //getall2 in service
+            var result = await _services.Getall2();
+            if(result == null)
+            {
                 return NotFound();
-            return Ok(trangThaiGhe);
+            }
+            return Ok(result);
+        }
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(string id)
+        {
+            var theloai = await _services.GetById(id);
+            if (theloai == null)
+            {
+                return NotFound();
+            }
+            return Ok(theloai);
         }
 
-        // POST: api/TrangThaiGhe
         [HttpPost]
-        public async Task<IActionResult> CreateTrangThaiGhe(TrangThaiGheModels trangThaiGheModels)
+        public async Task<IActionResult> Add(Trangthaighe trangthai)
         {
-            await _trangThaiGheService.CreateTrangThaiGhe(trangThaiGheModels);
-            return CreatedAtAction(nameof(GetTrangThaiGheById), new { id = trangThaiGheModels.Maghe }, trangThaiGheModels);
+            if (trangthai == null)
+            {
+                return BadRequest();
+            }
+            await _services.Create(trangthai);
+            return Ok();
+
         }
 
-        // PUT: api/TrangThaiGhe/{id}
+        [HttpPost("by-models")]
+        public async Task<IActionResult> Addbymodels(TrangThaiGheModels trangthaiGhe)
+        {
+            if (trangthaiGhe == null)
+            {
+                return BadRequest();
+            }
+            await _services.addTTGbyModels(trangthaiGhe);
+            return Ok();
+        }
+
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateTrangThaiGhe(string id, TrangThaiGheModels trangThaiGheModels)
+        public async Task<IActionResult> Update(string id, Trangthaighe trangthai)
         {
-            await _trangThaiGheService.UpdateTrangThaiGhe(id, trangThaiGheModels);
-            return NoContent();
+            if (trangthai == null)
+            {
+                return BadRequest();
+            }
+            await _services.Update(id, trangthai);
+            return Ok();
         }
 
-        // DELETE: api/TrangThaiGhe/{id}
+
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteTrangThaiGhe(string id)
+        public async Task<IActionResult> Delete(string id)
         {
-            await _trangThaiGheService.DeleteTrangThaiGhe(id);
-            return NoContent();
+            await _services.Delete(id);
+            return Ok("Ctdatve deleted successfully.");
         }
     }
 }

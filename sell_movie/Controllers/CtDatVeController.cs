@@ -1,107 +1,85 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using sell_movie.Filters;
 using sell_movie.Models;
 using sell_movie.Services;
-using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using AutoMapper;
+using sell_movie.Entities;
 
 namespace sell_movie.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
-    [MyAsyncFilterAtribute("Controller")]
-
-
+    [Route("api/[controller]")]
     public class CtdatveController : ControllerBase
     {
-        private readonly ICtdatveService _ctdatveService;
+        private readonly CtdatveService _ctdatveService;
 
-        public CtdatveController(ICtdatveService ctdatveService)
+        public CtdatveController(CtdatveService ctdatveService)
         {
             _ctdatveService = ctdatveService;
         }
 
+        // Endpoint for retrieving all Ctdatve entities
         [HttpGet]
-        [MyFilterAtribute("Action",-10)]
-        [MyFilterResourceFilter("Action")]
-
         public async Task<IActionResult> GetAll()
         {
-            Console.Write("The action is being executed");
-            try
-            {
-                var ctdatves = await _ctdatveService.GetAll();
-                return Ok(ctdatves);
-            }
-            catch (Exception ex)
-            {
-                // Xử lý lỗi và trả về lỗi nếu cần
-                return StatusCode(500, ex.Message);
-            }
+            var ctdatves = await _ctdatveService.GetAll();
+            return Ok(ctdatves);
         }
 
+        // Endpoint for retrieving a specific Ctdatve entity by ID
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(string id)
         {
-            try
+            var ctdatve = await _ctdatveService.GetById(id);
+            if (ctdatve == null)
             {
-                var ctdatve = await _ctdatveService.GetById(id);
-                if (ctdatve == null)
-                {
-                    return NotFound();
-                }
-                return Ok(ctdatve);
+                return NotFound();
             }
-            catch (Exception ex)
-            {
-                // Xử lý lỗi và trả về lỗi nếu cần
-                return StatusCode(500, ex.Message);
-            }
+            return Ok(ctdatve);
         }
 
+        // Endpoint for adding a new Ctdatve entity
         [HttpPost]
-        public async Task<IActionResult> Add(CtdatveModels ctdatve)
+        public async Task<IActionResult> Add(Ctdatve ctdatveentiti)
         {
-            try
+            if(ctdatveentiti == null)
             {
-                await _ctdatveService.Add(ctdatve);
-                return Ok();
+                return BadRequest();
             }
-            catch (Exception ex)
-            {
-                // Xử lý lỗi và trả về lỗi nếu cần
-                return StatusCode(500, ex.Message);
-            }
+            await _ctdatveService.Create(ctdatveentiti);
+            return Ok();
+            
         }
 
+        [HttpPost("add-by-models")]
+        public async Task<IActionResult> AddCtBymodel(CtdatveModels ct)
+        {
+            if (ct == null)
+            {
+                return BadRequest();
+            }
+            await _ctdatveService.CreatebyModels(ct);
+            return Ok();
+        }
+        // Endpoint for updating an existing Ctdatve entity
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(string id, CtdatveModels ctdatve)
+        public async Task<IActionResult> Update(string id,  Ctdatve ctDatve)
         {
-            try
+            if (ctDatve == null)
             {
-                await _ctdatveService.Update(id, ctdatve);
-                return Ok();
+                return BadRequest();
             }
-            catch (Exception ex)
-            {
-                // Xử lý lỗi và trả về lỗi nếu cần
-                return StatusCode(500, ex.Message);
-            }
+            await _ctdatveService.Update(id, ctDatve);
+            return Ok();
         }
 
+        // Endpoint for deleting a specific Ctdatve entity by ID
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(string id)
         {
-            try
-            {
-                await _ctdatveService.Delete(id);
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                // Xử lý lỗi và trả về lỗi nếu cần
-                return StatusCode(500, ex.Message);
-            }
+            await _ctdatveService.Delete(id);
+            return Ok("Ctdatve deleted successfully.");
         }
     }
 }

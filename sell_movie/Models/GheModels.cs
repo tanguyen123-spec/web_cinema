@@ -12,7 +12,5 @@ namespace sell_movie.Models
         public string TenGhe { get; set; } = null!;
         public string MaPhong { get; set; } = null!;
 
-       
-
     }
 }

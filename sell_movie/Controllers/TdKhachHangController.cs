@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using sell_movie.Entities;
 using sell_movie.Models;
 using sell_movie.Services;
-using System;
-using System.Threading.Tasks;
 
 namespace sell_movie.Controllers
 {
@@ -10,74 +10,64 @@ namespace sell_movie.Controllers
     [ApiController]
     public class TdKhachHangController : ControllerBase
     {
-        private readonly ITdKhachHangService _tdKhachHangService;
-
-        public TdKhachHangController(ITdKhachHangService tdKhachHangService)
+        private readonly TdKhachHangServices _services;
+        public TdKhachHangController(TdKhachHangServices services)
         {
-            _tdKhachHangService = tdKhachHangService;
+            _services = services;
         }
 
-        // GET: api/TdKhachHang
         [HttpGet]
-        public async Task<IActionResult> GetAllTdKhachHangs()
+        public async Task<IActionResult> GetAll()
         {
-            var tdKhachHangs = await _tdKhachHangService.GetAllTdKhachHangs();
-            return Ok(tdKhachHangs);
+            var diem = await _services.GetAll();
+            return Ok(diem);
         }
-
-        // GET: api/TdKhachHang/{id}
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetTdKhachHangById(string id)
+        [HttpGet("get-by-id/{id}")]
+        public async Task<IActionResult> GetById(string id)
         {
-            var tdKhachHang = await _tdKhachHangService.GetTdKhachHangById(id);
-            if (tdKhachHang == null)
-                return NotFound();
-            return Ok(tdKhachHang);
+            var diem = await _services.GetById(id);
+            if (diem == null)
+            {
+                return BadRequest();
+            }
+            return Ok(diem);
         }
-
-        // POST: api/TdKhachHang
         [HttpPost]
-        public async Task<IActionResult> CreateTdKhachHang(TdKhachHangModels tdKhachHangModels)
+        public async Task<IActionResult> Create(Tdkhachhang diem)
         {
-            try
+            if (diem == null)
             {
-                await _tdKhachHangService.CreateTdKhachHang(tdKhachHangModels);
-                return CreatedAtAction(nameof(GetTdKhachHangById), new { id = tdKhachHangModels.Makhachhang }, tdKhachHangModels);
+                return BadRequest("không có phòng để thêm!");
             }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            await _services.Create(diem);
+            return Ok();
         }
 
-        // PUT: api/TdKhachHang/{id}
+        [HttpPost("by-models")]
+        public async Task<IActionResult> CreatebyModels(TdKhachHangModels diem)
+        {
+            if (diem == null)
+            {
+                return BadRequest();
+            }    
+            await _services.Addttkh(diem);
+            return Ok();
+        }
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateTdKhachHang(string id, TdKhachHangModels tdKhachHangModels)
+        public async Task<IActionResult> Edit(string id, Tdkhachhang diem)
         {
-            try
+            if (diem != null)
             {
-                await _tdKhachHangService.UpdateTdKhachHang(id, tdKhachHangModels);
-                return NoContent();
+                await _services.Update(id, diem);
+                return Ok();
             }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            return BadRequest("chưa chỉnh sửa được!");
         }
-
-        // DELETE: api/TdKhachHang/{id}
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteTdKhachHang(string id)
+        public async Task<IActionResult> Delete(string id)
         {
-            try
-            {
-                await _tdKhachHangService.DeleteTdKhachHang(id);
-                return NoContent();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            await _services.Delete(id);
+            return BadRequest("Đã xóa");
         }
     }
 }

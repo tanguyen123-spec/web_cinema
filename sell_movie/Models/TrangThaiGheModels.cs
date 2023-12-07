@@ -9,7 +9,5 @@ namespace sell_movie.Models
         public byte TrangThai { get; set; }
         public string MaPhong { get; set; } = null!;
         public string MaLichChieu { get; set; } = null!;
-
-       
     }
 }

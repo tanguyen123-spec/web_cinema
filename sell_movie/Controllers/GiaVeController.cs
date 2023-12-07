@@ -1,58 +1,66 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using sell_movie.Models;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using sell_movie.Entities;
 using sell_movie.Services;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace sell_movie.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class GiaveController : ControllerBase
+    public class GiaVeController : ControllerBase
     {
-        private readonly IGiaveService _giaveService;
-
-        public GiaveController(IGiaveService giaveService)
+        private readonly GiaVeServices services_;
+        public GiaVeController(GiaVeServices services)
         {
-            _giaveService = giaveService;
+            services_ = services;
         }
-
         [HttpGet]
-        public async Task<IActionResult> GetAllGiaveModels()
+        public async Task<IActionResult> GetAll()
         {
-            var giaveModels = await _giaveService.GetAllGiaveModels();
-            return Ok(giaveModels);
+            var result = await services_.GetAll();
+            return Ok(result);
         }
-
-        [HttpGet("{maGiaVe}")]
-        public async Task<IActionResult> GetGiaveModelsById(string maGiaVe)
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(string id)
         {
-            var giaveModels = await _giaveService.GetGiaveModelsById(maGiaVe);
-            if (giaveModels == null)
+            var giave = await services_.GetById(id);
+            if (giave == null)
+            {
                 return NotFound();
-
-            return Ok(giaveModels);
+            }
+            return Ok(giave);
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddGiaveModels([FromBody] GiaveModels giaveModels)
+        public async Task<IActionResult> Add(Giave giave)
         {
-            await _giaveService.AddGiaveModels(giaveModels);
+            if (giave == null)
+            {
+                return BadRequest();
+            }
+            await services_.Create(giave);
+            return Ok();
+
+        }
+
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(string id, Giave giave)
+        {
+            if (giave == null)
+            {
+                return BadRequest();
+            }
+            await services_.Update(id, giave);
             return Ok();
         }
 
-        [HttpPut("{maGiaVe}")]
-        public async Task<IActionResult> UpdateGiaveModels(string maGiaVe, [FromBody] GiaveModels giaveModels)
-        {
-            await _giaveService.UpdateGiaveModels(giaveModels);
-            return Ok();
-        }
 
-        [HttpDelete("{maGiaVe}")]
-        public async Task<IActionResult> DeleteGiaveModels(string maGiaVe)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(string id)
         {
-            await _giaveService.DeleteGiaveModels(maGiaVe);
-            return Ok();
+            await services_.Delete(id);
+            return Ok("Ctdatve deleted successfully.");
         }
     }
 }

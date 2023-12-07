@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using sell_movie.Enities;
+using sell_movie.Entities;
 
 namespace sell_movie.Repository
 {
@@ -26,6 +26,7 @@ namespace sell_movie.Repository
         public async Task<IEnumerable<T>> GetAll()
         {
             return await _context.Set<T>().ToListAsync();
+            
         }
 
         public async Task<T> GetById(string id)

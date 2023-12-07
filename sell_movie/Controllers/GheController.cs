@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using sell_movie.Entities;
 using sell_movie.Models;
 using sell_movie.Services;
-using System;
-using System.Threading.Tasks;
 
 namespace sell_movie.Controllers
 {
@@ -10,90 +10,65 @@ namespace sell_movie.Controllers
     [ApiController]
     public class GheController : ControllerBase
     {
-        private readonly IGheServices _gheService;
-
-        public GheController(IGheServices gheService)
+        private readonly GheServices services_;
+        public GheController(GheServices services)
         {
-            _gheService = gheService;
+            services_ = services;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            try
-            {
-                var ghes = await _gheService.GetAll();
-                return Ok(ghes);
-            }
-            catch (Exception ex)
-            {
-                // Xử lý lỗi và trả về lỗi nếu cần
-                return StatusCode(500, ex.Message);
-            }
+            var result = await services_.GetAll();
+            return Ok(result);
         }
-
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(string id)
         {
-            try
+            var theloai = await services_.GetById(id);
+            if (theloai == null)
             {
-                var ghe = await _gheService.GetById(id);
-                if (ghe == null)
-                {
-                    return NotFound();
-                }
-                return Ok(ghe);
+                return NotFound();
             }
-            catch (Exception ex)
-            {
-                // Xử lý lỗi và trả về lỗi nếu cần
-                return StatusCode(500, ex.Message);
-            }
+            return Ok(theloai);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Add(GheModels ghe)
+        public async Task<IActionResult> Add(Ghe ghe)
         {
-            try
+            if (ghe == null)
             {
-                await _gheService.Add(ghe);
-                return Ok();
+                return BadRequest();
             }
-            catch (Exception ex)
-            {
-                // Xử lý lỗi và trả về lỗi nếu cần
-                return StatusCode(500, ex.Message);
-            }
+            await services_.Create(ghe);
+            return Ok();
+
         }
+        
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(string id, GheModels ghe)
+        public async Task<IActionResult> Update(string id, Ghe ghe)
         {
-            try
+            if (ghe == null)
             {
-                await _gheService.Update(id, ghe);
-                return Ok();
+                return BadRequest();
             }
-            catch (Exception ex)
-            {
-                // Xử lý lỗi và trả về lỗi nếu cần
-                return StatusCode(500, ex.Message);
-            }
+            await services_.Update(id, ghe);
+            return Ok();
         }
+
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(string id)
         {
-            try
-            {
-                await _gheService.Delete(id);
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                // Xử lý lỗi và trả về lỗi nếu cần
-                return StatusCode(500, ex.Message);
-            }
+            await services_.Delete(id);
+            return Ok("Ctdatve deleted successfully.");
+        }
+        [HttpGet("phong/{maPhong}/ghe")]
+        public async Task<IActionResult> GetGheByMaPhong(string maPhong)
+        {
+            var ghePhong = await services_.GetGheByMaPhongAsync(maPhong);
+            return Ok(ghePhong);
         }
     }
 }

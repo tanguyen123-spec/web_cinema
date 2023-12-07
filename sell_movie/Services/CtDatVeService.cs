@@ -1,43 +1,28 @@
 ﻿using AutoMapper;
-using sell_movie.Enities;
+using Microsoft.EntityFrameworkCore;
+using sell_movie.Entities;
 using sell_movie.Models;
 using sell_movie.Repository;
 
 namespace sell_movie.Services
 {
-    public class CtdatveService : ICtdatveService
+    public class CtdatveService : MyRepository<Ctdatve>
     {
-        private readonly IRepository<CtdatveModels> _ctdatveRepository;
-        
-
-        public CtdatveService(IRepository<CtdatveModels> ctdatveRepository )
+        private readonly web_cinema3Context _context;
+        public CtdatveService(web_cinema3Context context) : base(context)
         {
-            _ctdatveRepository = ctdatveRepository;
+            _context = context;
         }
-
-        public async Task<IEnumerable<CtdatveModels>> GetAll()
+        public async Task CreatebyModels(CtdatveModels ctdatve)
         {
-            
-            return await _ctdatveRepository.GetAll();
-        }
-
-        public async Task<CtdatveModels> GetById(string id)
-        {
-            return await _ctdatveRepository.GetById(id); 
-        }
-
-        public async Task Add(CtdatveModels ctdatve)
-        {
-            await _ctdatveRepository.Create(ctdatve);
-        }
-
-        public async Task Update(string id, CtdatveModels ctdatve)
-        {
-            await _ctdatveRepository.Update(id, ctdatve);
-        }
-        public async Task Delete(string id)
-        {
-            await _ctdatveRepository.Delete(id);
+            var ct = new Ctdatve
+            {
+                GiaVe = ctdatve.GiaVe,
+                MaDatVe = ctdatve.MaDatVe,
+                MaGhe = ctdatve.MaGhe
+            };
+            _context.Ctdatves.Add(ct);
+            await _context.SaveChangesAsync();
         }
     }
 }

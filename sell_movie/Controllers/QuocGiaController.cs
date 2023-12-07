@@ -1,59 +1,66 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using sell_movie.Models;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using sell_movie.Entities;
 using sell_movie.Services;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace sell_movie.Controllers
 {
-    [Route("api/quocgia")]
+    [Route("api/[controller]")]
     [ApiController]
     public class QuocGiaController : ControllerBase
     {
-        private readonly IQuocGiaService _quocGiaService;
-
-        public QuocGiaController(IQuocGiaService quocGiaService)
+        private QuocGiaServices services_;
+        public QuocGiaController(QuocGiaServices services_)
         {
-            _quocGiaService = quocGiaService;
+            this.services_ = services_;
         }
-
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<QuocGiaModels>>> GetAllQuocGia()
+        public async Task<IActionResult> GetAll()
         {
-            var quocGiaList = await _quocGiaService.GetAll();
-            return Ok(quocGiaList);
+            var result = await services_.GetAll();
+            return Ok(result);
         }
-
         [HttpGet("{id}")]
-        public async Task<ActionResult<QuocGiaModels>> GetQuocGiaById(string id)
+        public async Task<IActionResult> GetById(string id)
         {
-            var quocGia = await _quocGiaService.GetById(id);
-            if (quocGia == null)
+            var theloai = await services_.GetById(id);
+            if (theloai == null)
             {
                 return NotFound();
             }
-            return Ok(quocGia);
+            return Ok(theloai);
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddQuocGia(QuocGiaModels quocGia)
+        public async Task<IActionResult> Add(Quocgium quocgia)
         {
-            await _quocGiaService.Add(quocGia);
+            if (quocgia == null)
+            {
+                return BadRequest();
+            }
+            await services_.Create(quocgia);
             return Ok();
+
         }
+
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateQuocGia(string id, QuocGiaModels quocGia)
+        public async Task<IActionResult> Update(string id, Quocgium quocgia)
         {
-            await _quocGiaService.Update(id, quocGia);
+            if (quocgia == null)
+            {
+                return BadRequest();
+            }
+            await services_.Update(id, quocgia);
             return Ok();
         }
 
+
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteQuocGia(string id)
+        public async Task<IActionResult> Delete(string id)
         {
-            await _quocGiaService.Delete(id);
-            return Ok();
+            await services_.Delete(id);
+            return Ok("Ctdatve deleted successfully.");
         }
     }
 }

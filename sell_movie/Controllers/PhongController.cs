@@ -2,7 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using sell_movie.Enities;
+using System.Xml.Linq;
+using sell_movie.Entities;
 using sell_movie.Models;
 using sell_movie.Services;
 
@@ -35,7 +36,16 @@ public class PhongController : ControllerBase
         return Ok(phong);
     }
 
-   
+    [HttpPost]
+    public async Task<IActionResult> Create(Phong phong)
+    {
+        if (phong == null)
+        {
+            return BadRequest("Không có phòng để thêm!");
+        }
+        await _services.Create(phong);
+        return CreatedAtAction(nameof(GetById), new { id = phong.MaPhong }, phong);
+    }
     [HttpPost("add-ghe")]
     public async Task<IActionResult> CreateGheByPhong(PhongModels phong)
     {
@@ -63,5 +73,11 @@ public class PhongController : ControllerBase
     {
         await _services.Delete(id);
         return NoContent();
+    }
+    [HttpDelete("delete-ghe-and-phong-and-trangthaighe")]
+    public async Task<IActionResult> DeleteGheAndPhong(string id)
+    {
+        await _services.DeleteGhe(id);
+        return Ok();
     }
 }

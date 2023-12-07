@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using sell_movie.Entities;
 using sell_movie.Models;
 using sell_movie.Services;
-using System;
-using System.Threading.Tasks;
 
 namespace sell_movie.Controllers
 {
@@ -10,90 +10,54 @@ namespace sell_movie.Controllers
     [ApiController]
     public class LichChieuPhimController : ControllerBase
     {
-        private readonly ILichChieuPhimServices _lichChieuPhimServices;
-
-        public LichChieuPhimController(ILichChieuPhimServices lichChieuPhimServices)
+        private readonly LichChieuPhimServices services;
+        public LichChieuPhimController(LichChieuPhimServices services)
         {
-            _lichChieuPhimServices = lichChieuPhimServices;
+            this.services = services;
         }
-
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            try
-            {
-                var lichChieuPhims = await _lichChieuPhimServices.GetAll();
-                return Ok(lichChieuPhims);
-            }
-            catch (Exception ex)
-            {
-                // Xử lý lỗi và trả về lỗi nếu cần
-                return StatusCode(500, ex.Message);
-            }
+            var lcp = await services.GetAll();
+            return Ok(lcp);
         }
 
+        // Endpoint for retrieving a specific Ctdatve entity by ID
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(string id)
         {
-            try
-            {
-                var lichChieuPhim = await _lichChieuPhimServices.GetById(id);
-                if (lichChieuPhim == null)
-                {
-                    return NotFound();
-                }
-                return Ok(lichChieuPhim);
-            }
-            catch (Exception ex)
-            {
-                // Xử lý lỗi và trả về lỗi nếu cần
-                return StatusCode(500, ex.Message);
-            }
+            var lcp = await services.GetById(id);
+            return Ok(lcp);
         }
 
+        // Endpoint for adding a new Ctdatve entity
         [HttpPost]
-        public async Task<IActionResult> Add(LichchieuphimModels lichChieuPhim)
+        public async Task<IActionResult> Add(Lichchieuphim Lichchieu)
         {
-            try
+            if (Lichchieu != null)
             {
-                await _lichChieuPhimServices.Add(lichChieuPhim);
-                return Ok();
+                await services.Create(Lichchieu);
             }
-            catch (Exception ex)
-            {
-                // Xử lý lỗi và trả về lỗi nếu cần
-                return StatusCode(500, ex.Message);
-            }
+            return BadRequest("Đã Thêm");
         }
 
+        // Endpoint for updating an existing Ctdatve entity
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(string id, LichchieuphimModels lichChieuPhim)
+        public async Task<IActionResult> Update(string id, Lichchieuphim Lichchieu)
         {
-            try
+            if (Lichchieu != null)
             {
-                await _lichChieuPhimServices.Update(id, lichChieuPhim);
-                return Ok();
+                await services.Update(id, Lichchieu);
             }
-            catch (Exception ex)
-            {
-                // Xử lý lỗi và trả về lỗi nếu cần
-                return StatusCode(500, ex.Message);
-            }
+            return Ok();
         }
 
+        // Endpoint for deleting a specific Ctdatve entity by ID
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(string id)
         {
-            try
-            {
-                await _lichChieuPhimServices.Delete(id);
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                // Xử lý lỗi và trả về lỗi nếu cần
-                return StatusCode(500, ex.Message);
-            }
+            await services.Delete(id);
+            return BadRequest("Đã xóa lịch chiếu phim");
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using sell_movie.Entities;
 
 namespace sell_movie.Models
 {
@@ -11,7 +12,5 @@ namespace sell_movie.Models
         public int SoChoNgoi { get; set; }
         public int SoHang { get; set; }
         public int Socot { get; set; }
-
-       
     }
 }

@@ -7,7 +7,9 @@ namespace sell_movie.Models
     {
        
 
+        //key
         public string MaLichPhim { get; set; } = null!;
+        
         public string MaLichChieu { get; set; } = null!;
         public string MaPhong { get; set; } = null!;
         public string MaPhim { get; set; } = null!;

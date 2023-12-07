@@ -1,67 +1,77 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using sell_movie.Enities;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using sell_movie.Entities;
+using sell_movie.Models;
 using sell_movie.Services;
 
 namespace sell_movie.Controllers
 {
-    [ApiController]
     [Route("api/[controller]")]
-    public class KhachhangApiController : ControllerBase
+    [ApiController]
+    public class KhachHangController : ControllerBase
     {
-        private readonly IKhachhangService _khachhangService;
-
-        public KhachhangApiController(IKhachhangService khachhangService)
+        private readonly KhachHangServices services_;
+        public KhachHangController(KhachHangServices services_)
         {
-            _khachhangService = khachhangService;
+            this.services_ = services_;
         }
-
-        // GET: api/KhachhangApiController
         [HttpGet]
-        public IActionResult GetAllKhachhang()
+        public async Task<IActionResult> GetAll()
         {
-            var khachhangs = _khachhangService.GetAllKhachhang();
-            return Ok(khachhangs);
+            var result = await services_.GetAll();
+            return Ok(result);
         }
-
-        // GET: api/KhachhangApiController/{id}
         [HttpGet("{id}")]
-        public IActionResult GetKhachhangById(string id)
+        public async Task<IActionResult> GetById(string id)
         {
-            var khachhang = _khachhangService.GetKhachhangById(id);
-            if (khachhang == null)
+            var theloai = await services_.GetById(id);
+            if (theloai == null)
             {
                 return NotFound();
             }
-            return Ok(khachhang);
+            return Ok(theloai);
         }
 
-        // POST: api/KhachhangApiController
         [HttpPost]
-        public IActionResult AddKhachhang(Khachhang khachhang)
+        public async Task<IActionResult> Add(Khachhang khachhang)
         {
-            _khachhangService.AddKhachhang(khachhang);
-            return CreatedAtAction(nameof(GetKhachhangById), new { id = khachhang.Makhachhang }, khachhang);
-        }
-
-        // PUT: api/KhachhangApiController/{id}
-        [HttpPut("{id}")]
-        public IActionResult UpdateKhachhang(string id, Khachhang khachhang)
-        {
-            if (id != khachhang.Makhachhang)
+            if (khachhang == null)
             {
                 return BadRequest();
             }
+            await services_.Create(khachhang);
+            return Ok();
 
-            _khachhangService.UpdateKhachhang(khachhang);
-            return NoContent();
+        }
+        [HttpPost("add-by-models")]
+        public async Task<IActionResult> AddByModels(KhachhangModels khachhang)
+        {
+            if (khachhang == null)
+            {
+                return BadRequest();
+            }    
+            await services_.AddByModels(khachhang);
+            return Ok(khachhang);
+        }    
+
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(string id, Khachhang khachhang)
+        {
+            if (khachhang == null)
+            {
+                return BadRequest();
+            }
+            await services_.Update(id,  khachhang);
+            return Ok();
         }
 
-        // DELETE: api/KhachhangApiController/{id}
+
         [HttpDelete("{id}")]
-        public IActionResult DeleteKhachhang(string id)
+        public async Task<IActionResult> Delete(string id)
         {
-            _khachhangService.DeleteKhachhang(id);
-            return NoContent();
+            await services_.Delete(id);
+            return Ok("Ctdatve deleted successfully.");
         }
     }
 }

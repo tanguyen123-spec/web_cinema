@@ -1,6 +1,9 @@
-﻿namespace sell_movie.Models
+﻿using System;
+using System.Collections.Generic;
+
+namespace sell_movie.Models
 {
-    public class PhimModels
+    public partial class PhimModels
     {
         public string MaPhim { get; set; } = null!;
         public string TenPhim { get; set; } = null!;

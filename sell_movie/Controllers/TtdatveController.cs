@@ -1,9 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using sell_movie.Entities;
 using sell_movie.Models;
 using sell_movie.Services;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace sell_movie.Controllers
 {
@@ -11,90 +10,60 @@ namespace sell_movie.Controllers
     [ApiController]
     public class TtDatVeController : ControllerBase
     {
-        private readonly ITtDatVeServices _ttDatVeService;
-
-        public TtDatVeController(ITtDatVeServices ttDatVeService)
+        private readonly TtDatVeServices _services;
+        public TtDatVeController(TtDatVeServices services)
         {
-            _ttDatVeService = ttDatVeService;
+            _services = services;
         }
-
         [HttpGet]
-        public async Task<IActionResult> GetAllTtDatVe()
+        public async Task<IActionResult> GetAll()
         {
-            try
-            {
-                var ttDatVes = await _ttDatVeService.GetAll();
-                return Ok(ttDatVes);
-            }
-            catch (Exception ex)
-            {
-                // Xử lý lỗi và trả về lỗi nếu cần
-                return StatusCode(500, ex.Message);
-            }
+            var ctdatves = await _services.GetAll();
+            return Ok(ctdatves);
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetTtDatVeById(string id)
+        public async Task<IActionResult> GetById(string id)
         {
-            try
+            var ctdatve = await _services.GetById(id);
+            if (ctdatve == null)
             {
-                var ttDatVe = await _ttDatVeService.GetById(id);
-                if (ttDatVe == null)
-                {
-                    return NotFound();
-                }
-                return Ok(ttDatVe);
+                return NotFound();
             }
-            catch (Exception ex)
-            {
-                // Xử lý lỗi và trả về lỗi nếu cần
-                return StatusCode(500, ex.Message);
-            }
+            return Ok(ctdatve);
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddTtDatVe(TtdatveModels ttDatVe)
+        public async Task<IActionResult> Add(Ttdatve ttdv)
         {
-            try
+            if (ttdv == null)
             {
-                await _ttDatVeService.Add(ttDatVe);
-                return Ok();
+                return BadRequest();
             }
-            catch (Exception ex)
-            {
-                // Xử lý lỗi và trả về lỗi nếu cần
-                return StatusCode(500, ex.Message);
-            }
+            await _services.Create(ttdv);
+            return Ok();
+
         }
+
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateTtDatVe(string id, TtdatveModels ttDatVe)
+        public async Task<IActionResult> Update(string id, Ttdatve ttdv)
         {
-            try
+            if (ttdv == null)
             {
-                await _ttDatVeService.Update(id, ttDatVe);
-                return Ok();
+                return BadRequest();
             }
-            catch (Exception ex)
-            {
-                // Xử lý lỗi và trả về lỗi nếu cần
-                return StatusCode(500, ex.Message);
-            }
+            await _services.Update(id, ttdv);
+            return Ok();
         }
 
+
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteTtDatVe(string id)
+        public async Task<IActionResult> Delete(string id)
         {
-            try
-            {
-                await _ttDatVeService.Delete(id);
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                // Xử lý lỗi và trả về lỗi nếu cần
-                return StatusCode(500, ex.Message);
-            }
+            await _services.Delete(id);
+            return Ok("Ctdatve deleted successfully.");
         }
+
     }
 }

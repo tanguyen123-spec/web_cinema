@@ -1,40 +1,16 @@
-﻿using sell_movie.Enities;
+﻿using sell_movie.Entities;
 using sell_movie.Models;
 using sell_movie.Repository;
 
 namespace sell_movie.Services
 {
-    public class TtDatVeServices : ITtDatVeServices
+    public class TtDatVeServices : MyRepository<Ttdatve>
     {
-        private readonly IRepository<TtdatveModels> repository_;
-        public TtDatVeServices(IRepository<TtdatveModels> repository) 
-        { 
-            repository_ = repository;
-        }
-
-        public async Task Add(TtdatveModels ctdatve)
+        private readonly web_cinema3Context _context;
+        public TtDatVeServices(web_cinema3Context context) : base(context) 
         {
-            await repository_.Create(ctdatve);
-        }
-
-        public async Task Delete(string id)
-        {
-            await repository_.Delete(id);
-        }
-
-        public async Task<IEnumerable<TtdatveModels>> GetAll()
-        {
-            return await repository_.GetAll();
-        }
-
-        public async Task<TtdatveModels> GetById(string id)
-        {
-            return await repository_.GetById(id);
-        }
-
-        public async Task Update(string id, TtdatveModels ctdatve)
-        {
-             await repository_.Update(id, ctdatve);
+            _context = context;
         }
     }
+    
 }

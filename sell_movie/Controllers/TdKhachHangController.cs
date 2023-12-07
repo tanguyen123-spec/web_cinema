@@ -32,17 +32,7 @@ namespace sell_movie.Controllers
             }
             return Ok(diem);
         }
-        [HttpPost]
-        public async Task<IActionResult> Create(Tdkhachhang diem)
-        {
-            if (diem == null)
-            {
-                return BadRequest("không có phòng để thêm!");
-            }
-            await _services.Create(diem);
-            return Ok();
-        }
-
+    
         [HttpPost("by-models")]
         public async Task<IActionResult> CreatebyModels(TdKhachHangModels diem)
         {

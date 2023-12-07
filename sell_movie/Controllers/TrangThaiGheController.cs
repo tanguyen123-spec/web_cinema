@@ -38,17 +38,7 @@ namespace sell_movie.Controllers
             return Ok(theloai);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Add(Trangthaighe trangthai)
-        {
-            if (trangthai == null)
-            {
-                return BadRequest();
-            }
-            await _services.Create(trangthai);
-            return Ok();
-
-        }
+    
 
         [HttpPost("by-models")]
         public async Task<IActionResult> Addbymodels(TrangThaiGheModels trangthaiGhe)

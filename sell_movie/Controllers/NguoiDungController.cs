@@ -43,7 +43,16 @@ namespace sell_movie.Controllers
             return Ok();
 
         }
-
+        [HttpPost("add-by-models")]
+        public async Task<IActionResult> AddNguoidungByModels(NguoidungModels nguoidung)
+        {
+            if (nguoidung == null)
+            {
+                return BadRequest();
+            }
+            await services_.CreatebyModels(nguoidung);
+            return Ok(nguoidung);
+        }
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(string id, Nguoidung nguoidung)
         {

@@ -1,4 +1,5 @@
 ﻿using sell_movie.Entities;
+using sell_movie.Models;
 using sell_movie.Repository;
 
 namespace sell_movie.Services
@@ -18,6 +19,25 @@ namespace sell_movie.Services
                 return phim.TenPhim;
             }
             return "phim không tồn tại";
+        }
+        public async Task CreatebyModels(PhimModels phim)
+        {
+            var p = new Phim
+        
+            {
+                MaPhim = phim.MaPhim,
+                TenPhim = phim.TenPhim,
+                Ngaykhoichieu = phim.Ngaykhoichieu,
+                Mota = phim.Mota,
+                Anh = phim.Anh,
+                Trailer = phim.Trailer,
+             MaTl = phim.MaTl,
+                MaQuocGia = phim.MaQuocGia,
+             Banner = phim.Banner,
+                Thoiluong = phim.Thoiluong
+    };
+            _context.Phims.Add(p);
+            await _context.SaveChangesAsync();
         }
     }
 }

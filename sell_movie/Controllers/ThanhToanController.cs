@@ -32,16 +32,15 @@ namespace sell_movie.Controllers
             return Ok(theloai);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Add(Thanhtoan thanhtoan)
+        [HttpPost("add-by-models")]
+        public async Task<IActionResult> AddThanhToanByModels(ThanhToanModels thanhtoan)
         {
             if (thanhtoan == null)
             {
                 return BadRequest();
             }
-            await services_.Create(thanhtoan);
-            return Ok();
-
+            await services_.AddAll(thanhtoan);
+            return Ok(thanhtoan);
         }
 
 

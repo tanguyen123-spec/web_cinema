@@ -40,16 +40,16 @@ namespace sell_movie.Controllers
             return Ok(theloai);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Add(Theloai theloai)
+
+        [HttpPost("add-by-models")]
+        public async Task<IActionResult> AddTheloaiByModels(TheloaiModels theloai)
         {
             if (theloai == null)
             {
                 return BadRequest();
             }
-            await services_.Create(theloai);
-            return Ok();
-
+            await services_.CreatebyModels(theloai);
+            return Ok(theloai);
         }
 
 

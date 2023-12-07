@@ -12,6 +12,17 @@ namespace sell_movie.Services
         {
             _context = context;
         }
+        public async Task CreatebyModels(GheModels ghe)
+        {
+            var g = new Ghe
+            {
+                MaGhe = ghe.MaGhe,
+                TenGhe = ghe.TenGhe,
+                MaPhong = ghe.MaPhong
+            };
+            _context.Ghes.Add(g);
+            await _context.SaveChangesAsync();
+        }
         public async Task<List<Ghe>> GetGheByMaPhongAsync(string maPhong)
         {
             return await _context.Ghes.Where(g => g.MaPhong == maPhong).ToListAsync();

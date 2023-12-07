@@ -1,4 +1,5 @@
-﻿using sell_movie.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using sell_movie.Entities;
 using sell_movie.Models;
 using sell_movie.Repository;
 
@@ -11,9 +12,17 @@ namespace sell_movie.Services
         {
             context_ = context;
         }
-        //public string GetTenPhim(string name)
-        //{
-        //    var Ten = ()
-        //}
+        public async Task CreatebyModels(LichchieuphimModels lichchieuphim)
+        {
+            var lcp = new Lichchieuphim
+            {
+                MaLichChieu = lichchieuphim.MaLichPhim,
+                MaPhong = lichchieuphim.MaPhong,
+                MaPhim = lichchieuphim.MaPhim
+                  
+    };
+            context_.Lichchieuphims.Add(lcp);
+            await context_.SaveChangesAsync();
+        }
     }
 }

@@ -40,6 +40,16 @@ namespace sell_movie.Controllers
             }
             return BadRequest("Đã Thêm");
         }
+        [HttpPost("add-by-models")]
+        public async Task<IActionResult> AddLCPByModels(LichchieuphimModels lichchieuphim)
+        {
+            if (lichchieuphim == null)
+            {
+                return BadRequest();
+            }
+            await services.CreatebyModels(lichchieuphim);
+            return Ok(lichchieuphim);
+        }
 
         // Endpoint for updating an existing Ctdatve entity
         [HttpPut("{id}")]

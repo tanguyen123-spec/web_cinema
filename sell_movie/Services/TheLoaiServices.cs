@@ -23,6 +23,17 @@ namespace sell_movie.Services
                 TenTl = tl.TenTl,
             });
         }
+        public async Task CreatebyModels(TheloaiModels theloai)
+        {
+            var qg = new Theloai
+            {
+                MaTl = theloai.MaTl,
+                TenTl = theloai.TenTl,
+
+            };
+            _context.Theloais.Add(qg);
+            await _context.SaveChangesAsync();
+        }
 
     }
 }

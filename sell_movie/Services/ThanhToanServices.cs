@@ -11,24 +11,19 @@ namespace sell_movie.Services
         {
             _context = context;
         }
-        //public async Task AddAll(ThanhToanModels thanhToan )
-        //{
-        //    var th = new Thanhtoan
-        //    { 
-        //        MaDatVe = thanhToan.MaDatVe,
-        //        MaNhanVien = thanhToan.MaNhanVien,
-        //        MaThanhToan = thanhToan.MaThanhToan,
-        //        NgayThanhToan = thanhToan.NgayThanhToan,
-        //        Phuongthucthanhtoan = thanhToan.Phuongthucthanhtoan,
-        //    };
-        //    _context.Add(th);
+        public async Task AddAll(ThanhToanModels thanhToan )
+        {
+            var th = new Thanhtoan
+            { 
+               MaDatVe = thanhToan.MaDatVe,
+               MaNhanVien = thanhToan.MaNhanVien,
+                MaThanhToan = thanhToan.MaThanhToan,
+                NgayThanhToan = thanhToan.NgayThanhToan,
+                Phuongthucthanhtoan = thanhToan.Phuongthucthanhtoan,
+            };
+           _context.Add(th);
+            await _context.SaveChangesAsync();
 
-        //    var ttdv = new Ttdatve
-        //    {
-        //        MaDatVe = thanhToan.MaDatVe,
-        //        MaLichPhim = (from lc in _context.Lichchieuphims where);
-        //    };
-
-        //}
+        }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using sell_movie.Entities;
+using sell_movie.Models;
 using sell_movie.Services;
 
 namespace sell_movie.Controllers
@@ -31,16 +32,15 @@ namespace sell_movie.Controllers
             return Ok(theloai);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Add(Quocgium quocgia)
+        [HttpPost("add-by-models")]
+        public async Task<IActionResult> AddQuocGiaByModels(QuocGiaModels quocgium)
         {
-            if (quocgia == null)
+            if (quocgium == null)
             {
                 return BadRequest();
             }
-            await services_.Create(quocgia);
-            return Ok();
-
+            await services_.CreatebyModels(quocgium);
+            return Ok(quocgium);
         }
 
 

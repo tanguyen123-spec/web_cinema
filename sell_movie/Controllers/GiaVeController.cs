@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using sell_movie.Entities;
+using sell_movie.Models;
 using sell_movie.Services;
 
 namespace sell_movie.Controllers
@@ -42,7 +43,16 @@ namespace sell_movie.Controllers
             return Ok();
 
         }
-
+        [HttpPost("add-by-models")]
+        public async Task<IActionResult> AddGiaveBymodel(GiaveModels giave)
+        {
+            if (giave == null)
+            {
+                return BadRequest();
+            }
+            await services_.CreatebyModels(giave);
+            return Ok();
+        }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(string id, Giave giave)

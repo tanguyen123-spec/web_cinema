@@ -33,17 +33,17 @@ namespace sell_movie.Controllers
             return Ok(ctdatve);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Add(Ttdatve ttdv)
+        [HttpPost("add-by-models")]
+        public async Task<IActionResult> AddTheloaiByModels(TtdatveModels ttdatve)
         {
-            if (ttdv == null)
+            if (ttdatve == null)
             {
                 return BadRequest();
             }
-            await _services.Create(ttdv);
-            return Ok();
-
+            await _services.CreatebyModels(ttdatve);
+            return Ok(ttdatve);
         }
+
 
 
         [HttpPut("{id}")]

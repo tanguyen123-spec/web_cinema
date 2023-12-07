@@ -11,6 +11,21 @@ namespace sell_movie.Services
         {
             _context = context;
         }
+        public int MaDatVe { get; set; }
+        public string MaLichPhim { get; set; } = null!;
+        public DateTime NgayDat { get; set; }
+        public async Task CreatebyModels(TtdatveModels ttdatve)
+        {
+            var tt = new Ttdatve
+            {
+                MaDatVe = ttdatve.MaDatVe,
+                MaLichPhim = ttdatve.MaLichPhim,
+                NgayDat = ttdatve.NgayDat
+
+            };
+            _context.Ttdatves.Add(tt);
+            await _context.SaveChangesAsync();
+        }
     }
     
 }

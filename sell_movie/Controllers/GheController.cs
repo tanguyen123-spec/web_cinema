@@ -44,7 +44,17 @@ namespace sell_movie.Controllers
             return Ok();
 
         }
-        
+        [HttpPost("add-by-models")]
+        public async Task<IActionResult> AddGheBymodel(GheModels g)
+        {
+            if (g == null)
+            {
+                return BadRequest();
+            }
+            await services_.CreatebyModels(g);
+            return Ok();
+        }
+
 
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(string id, Ghe ghe)

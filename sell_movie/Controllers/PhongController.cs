@@ -35,17 +35,6 @@ public class PhongController : ControllerBase
         }
         return Ok(phong);
     }
-
-    [HttpPost]
-    public async Task<IActionResult> Create(Phong phong)
-    {
-        if (phong == null)
-        {
-            return BadRequest("Không có phòng để thêm!");
-        }
-        await _services.Create(phong);
-        return CreatedAtAction(nameof(GetById), new { id = phong.MaPhong }, phong);
-    }
     [HttpPost("add-ghe")]
     public async Task<IActionResult> CreateGheByPhong(PhongModels phong)
     {
@@ -56,7 +45,6 @@ public class PhongController : ControllerBase
         await _services.CustomCreate(phong);
         return Ok(phong);
     }
-
     [HttpPut("{id}")]
     public async Task<IActionResult> Edit(string id, Phong phong)
     {

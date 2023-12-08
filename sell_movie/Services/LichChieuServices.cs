@@ -15,10 +15,10 @@ namespace sell_movie.Services
         {
             var lc = new Lichchieu
             {
-                 
-        MaLichChieu = lichchieu.MaLichChieu,
+
+                MaLichChieu = lichchieu.MaLichChieu,
                 NgayChieu = lichchieu.NgayChieu,
-                GioChieu = lichchieu.GioChieu
+                GioChieu = new TimeSpan(lichchieu.Gio, lichchieu.Phut, 0)
 
             };
             context_.Lichchieus.Add(lc);

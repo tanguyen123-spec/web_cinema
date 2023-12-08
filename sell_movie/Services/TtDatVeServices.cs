@@ -26,6 +26,7 @@ namespace sell_movie.Services
             _context.Ttdatves.Add(tt);
             await _context.SaveChangesAsync();
         }
+
     }
     
 }

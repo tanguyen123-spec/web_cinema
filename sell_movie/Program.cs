@@ -49,7 +49,8 @@ builder.Services.AddScoped<KhachHangServices>();
 builder.Services.AddScoped<NguoiDungServices>();
 builder.Services.AddScoped<GiaVeServices>();
 builder.Services.AddScoped(typeof(IRepository<>), typeof(MyRepository<>));
-
+builder.Services.AddScoped<LichChieuServices>();
+builder.Services.AddScoped<DisInforService>();
 
 
 

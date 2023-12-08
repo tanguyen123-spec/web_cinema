@@ -9,8 +9,14 @@ namespace sell_movie.Models
 
         public string MaLichChieu { get; set; } = null!;
         public DateTime NgayChieu { get; set; }
-        public TimeSpan GioChieu { get; set; }
+    
+        public int Gio { get; set; }
+        public int Phut { get; set; }
 
-      
+public TimeSpan GioChieu
+        {
+            get { return new TimeSpan(Gio, Phut, 0); }
+        }
+
     }
 }

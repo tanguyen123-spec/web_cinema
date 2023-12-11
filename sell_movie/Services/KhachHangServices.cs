@@ -1,4 +1,5 @@
-﻿using sell_movie.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using sell_movie.Entities;
 using sell_movie.Models;
 using sell_movie.Repository;
 
@@ -13,7 +14,8 @@ namespace sell_movie.Services
         }
         public async Task AddByModels(KhachhangModels khachhang)
         {
-            var kh = new Khachhang { 
+            var kh = new Khachhang
+            {
                 Makhachhang = khachhang.Makhachhang,
                 Tenkhachhang = khachhang.Tenkhachhang,
                 Diachi = khachhang.Diachi,
@@ -26,9 +28,46 @@ namespace sell_movie.Services
                 Makhachhang = kh.Makhachhang,
                 HangKh = "None",
             };
-            _context.Add(tdkh);
-            _context.Add(kh);   
+
+            // Thêm bản ghi vào bảng "khachhang" trước
+            _context.Add(kh);
             await _context.SaveChangesAsync();
+
+            // Thêm bản ghi vào bảng "tdkhachhang" sau
+            _context.Add(tdkh);
+            await _context.SaveChangesAsync();
+
+            // Xóa các bản ghi liên quan trong bảng "tdkhachhang"
+            var relatedTdkh = await _context.Tdkhachhangs
+                .Where(t => t.Makhachhang == kh.Makhachhang)
+                .ToListAsync();
+
+            if (relatedTdkh.Count > 0)
+            {
+                _context.RemoveRange(relatedTdkh);
+                await _context.SaveChangesAsync();
+            }
+        }
+        public async Task Delete(string id)
+        {
+            var khachhang = await GetById(id)
+;
+            if (khachhang != null)
+            {
+                // Xóa các bản ghi liên quan trong bảng "tdkhachhang"
+                var relatedTdkh = await _context.Tdkhachhangs
+                    .Where(t => t.Makhachhang == id)
+                    .ToListAsync();
+
+                if (relatedTdkh.Count > 0)
+                {
+                    _context.RemoveRange(relatedTdkh);
+                }
+
+                // Xóa khách hàng
+                _context.Remove(khachhang);
+                await _context.SaveChangesAsync();
+            }
         }
     }
 }

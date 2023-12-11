@@ -51,7 +51,10 @@ builder.Services.AddScoped<GiaVeServices>();
 builder.Services.AddScoped(typeof(IRepository<>), typeof(MyRepository<>));
 builder.Services.AddScoped<LichChieuServices>();
 builder.Services.AddScoped<DisInforService>();
-
+builder.Services.AddScoped<PhimServices>();
+builder.Services.AddScoped<NhanVienServices>();
+builder.Services.AddScoped<GetIdGheService>();
+builder.Services.AddScoped<GetPhimByIDNgayChieuService>();
 
 
 builder.Services.AddSwaggerGen(c =>

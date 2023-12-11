@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace sell_movie.Entities
 {
@@ -16,7 +17,7 @@ namespace sell_movie.Entities
         public int SoChoNgoi { get; set; }
         public int SoHang { get; set; }
         public int Socot { get; set; }
-
+        [JsonIgnore]
         public virtual List<Ghe> Ghes { get; set; }
         public virtual ICollection<Lichchieuphim> Lichchieuphims { get; set; }
     }

@@ -12,6 +12,7 @@
         {
             get { return new TimeSpan(Gio, Phut, 0); }
         }
+        public string MaPhong { get; set; }
         public int SoLuong { get; set; }
         public string MaGhe { get; set; }
         public string PhuongThucThanhToan { get; set; }

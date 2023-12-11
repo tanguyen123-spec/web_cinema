@@ -69,5 +69,13 @@ namespace sell_movie.Controllers
             await services.Delete(id);
             return BadRequest("Đã xóa lịch chiếu phim");
         }
+       
+        [HttpGet("all")]
+        public async Task<IActionResult> GetAllLichChieuPhimInfo()
+        {
+            var lichChieuPhimInfoList = await services.GetAllLichChieuPhimInfo();
+            return Ok(lichChieuPhimInfoList);
+        }
+       
     }
 }

@@ -12,9 +12,9 @@ namespace sell_movie.Services
         {
             context_ = context;
         }
-        public async Task<List<Ghe>> GetGheByTenPhimVaGioChieu(GeTGhemodel tGhemodel)
+
+        public async Task<List<GheWithTrangThaiModel>> GetGheByTenPhimVaGioChieu(GeTGhemodel tGhemodel)
         {
-            // Truy vấn bảng Lichchieus để lấy mã lịch chiếu dựa trên thông tin giờ chiếu và ngày chiếu
             var lichchieu = context_.Lichchieus.FirstOrDefault(lc =>
                 lc.GioChieu == new TimeSpan(tGhemodel.Gio, tGhemodel.Phut, 0));
             if (lichchieu != null)
@@ -30,13 +30,46 @@ namespace sell_movie.Services
                     {
                         var maPhongGhe = phong.MaPhong;
 
+                        // Lấy danh sách mã ghế trong bảng trạng thái ghế
+                        var danhSachMaGheTrangThai1 = context_.Trangthaighes
+                            .Where(tt => tt.MaPhong == maPhong && tt.TrangThai == 1)
+                            .Select(tt => tt.Maghe)
+                            .ToList();
+
+                        // Lấy danh sách ghế của phòng
                         var danhSachGhe = context_.Ghes.Where(g => g.MaPhong == maPhong).ToList();
-                        return danhSachGhe;
+
+                        // Lấy số hàng và số cột từ đối tượng phong
+                        var soHang = phong.SoHang;
+                        var soCot = phong.Socot;
+
+                        // Khởi tạo danh sách ghế kèm trạng thái
+                        var danhSachGheWithTrangThai = new List<GheWithTrangThaiModel>();
+
+                        // Lấy tên phòng từ mã phòng
+                        var tenPhong = phong.TenPhong;
+
+                        // Duyệt qua danh sách ghế và kiểm tra trạng thái
+                        foreach (var ghe in danhSachGhe)
+                        {
+                            var gheWithTrangThaiModel = new GheWithTrangThaiModel
+                            {
+                                TenPhong = tenPhong,
+                                SoHang = soHang,
+                                Socot = soCot,
+                                Ghe = ghe,
+                                TrangThai = danhSachMaGheTrangThai1.Contains(ghe.MaGhe) ? 1 : 0
+                            };
+
+                            danhSachGheWithTrangThai.Add(gheWithTrangThaiModel);
+                        }
+
+                        return danhSachGheWithTrangThai;
                     }
                 }
             }
 
-            return new List<Ghe>(); // Trả về danh sách ghế mặc định
+            return new List<GheWithTrangThaiModel>(); // Trả về danh sách ghế mặc định
         }
     }
 }

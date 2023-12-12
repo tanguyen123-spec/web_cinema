@@ -12,38 +12,31 @@ namespace sell_movie.Services
         {
             _context = context;
         }
-        public async Task<List<TimeSpan>> GetGioChieuByNgayChieu(DateTime ngayChieu)
+        public async Task<List<PhimGioChieu>> GetPhimGioChieuByIDNgayChieu(GetPhimByIDNgayChieumodels phim)
         {
-            var gioChieu = await _context.Lichchieus
-                .Where(lc => lc.NgayChieu == ngayChieu)
-                .Select(lc => lc.GioChieu)
-                .ToListAsync();
+            var lichchieus = _context.Lichchieus.Where(lc => lc.NgayChieu == phim.NgayChieu).ToList();
+            var danhSachPhimGioChieu = new List<PhimGioChieu>();
 
-            return gioChieu;
-        }
-        public async Task<string> GetPhimByIDNgayChieu(GetPhimByIDNgayChieumodels phim)
-        {
-            // Truy vấn bảng Lichchieus để lấy mã lịch chiếu dựa trên thông tin giờ chiếu và ngày chiếu
-            var lichchieu = _context.Lichchieus.FirstOrDefault(lc =>
-                lc.NgayChieu == phim.NgayChieu);
-            if (lichchieu != null)
+            var phimGioChieuGroups = lichchieus
+                .Join(_context.Lichchieuphims, lc => lc.MaLichChieu, lp => lp.MaLichChieu, (lc, lp) => new { lc, lp })
+                .Join(_context.Phims, lcp => lcp.lp.MaPhim, p => p.MaPhim, (lcp, p) => new { lcp.lc, p })
+                .GroupBy(lcpp => lcpp.p.TenPhim);
+
+            foreach (var phimGioChieuGroup in phimGioChieuGroups)
             {
-                var lichchieuPhim = _context.Lichchieuphims.FirstOrDefault(lp =>
-                    lp.MaLichChieu == lichchieu.MaLichChieu);
+                var tenPhim = phimGioChieuGroup.Key;
+                var gioChieuList = phimGioChieuGroup.Select(lcpp => lcpp.lc.GioChieu).ToList();
 
-                if (lichchieuPhim != null)
+                var phimGioChieu = new PhimGioChieu
                 {
-                    var maPhim = lichchieuPhim.MaPhim;
-                    var tenPhim = _context.Phims.FirstOrDefault(p => p.MaPhim == maPhim)?.TenPhim;
+                    TenPhim = tenPhim,
+                    GioChieu = gioChieuList
+                };
 
-                    if (!string.IsNullOrEmpty(tenPhim))
-                    {
-                        return tenPhim;
-                    }
-                }
+                danhSachPhimGioChieu.Add(phimGioChieu);
             }
 
-            return null; // Trả về null nếu không tìm thấy tên phim
+            return danhSachPhimGioChieu;
         }
     }
 }

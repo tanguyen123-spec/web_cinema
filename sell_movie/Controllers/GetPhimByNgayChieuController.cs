@@ -15,23 +15,21 @@ namespace sell_movie.Controllers
             _service = service;
         }
         [HttpGet]
-        public async Task<IActionResult> Get([FromQuery] DateTime ngayChieu)
+        public async Task<ActionResult<List<PhimGioChieu>>> GetPhimGioChieuByNgayChieu(DateTime ngayChieu)
         {
             var phim = new GetPhimByIDNgayChieumodels
             {
                 NgayChieu = ngayChieu
             };
 
-            var tenPhim = await _service.GetPhimByIDNgayChieu(phim);
+            var danhSachPhimGioChieu = await _service.GetPhimGioChieuByIDNgayChieu(phim);
 
-            if (!string.IsNullOrEmpty(tenPhim))
+            if (danhSachPhimGioChieu.Count == 0)
             {
-                var phimGioChieu = await _service.GetGioChieuByNgayChieu(ngayChieu);
-
-                return Ok(new { TenPhim = tenPhim, GioChieu = phimGioChieu });
+                return NotFound(); // Trả về 404 Not Found nếu không tìm thấy dữ liệu
             }
 
-            return NotFound();
+            return danhSachPhimGioChieu;
         }
     }
 }

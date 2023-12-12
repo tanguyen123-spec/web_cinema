@@ -1,7 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using CsvHelper;
+using Microsoft.EntityFrameworkCore;
 using sell_movie.Entities;
 using sell_movie.Models;
 using sell_movie.Repository;
+using System.Globalization;
 
 namespace sell_movie.Services
 {
@@ -47,11 +49,29 @@ namespace sell_movie.Services
                 _context.RemoveRange(relatedTdkh);
                 await _context.SaveChangesAsync();
             }
+
+            // Ghi dữ liệu của khách hàng vào tệp CSV
+            using (var writer = new StreamWriter("./CSVhelper/KhachHang.csv", true))
+            using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
+            {
+                var customerData = new KhachhangModels
+                {
+                    Makhachhang = kh.Makhachhang,
+                    Tenkhachhang = kh.Tenkhachhang,
+                    Diachi = kh.Diachi,
+                    Gioitinh = kh.Gioitinh,
+                    Sdt = kh.Sdt
+                };
+
+                csv.WriteRecord(customerData);
+                csv.NextRecord(); // Đặt xuống dòng mới cho mỗi thông tin khách hàng
+                await writer.FlushAsync();
+            }
         }
         public async Task Delete(string id)
         {
-            var khachhang = await GetById(id)
-;
+            var khachhang = await GetById(id);
+
             if (khachhang != null)
             {
                 // Xóa các bản ghi liên quan trong bảng "tdkhachhang"
@@ -67,7 +87,34 @@ namespace sell_movie.Services
                 // Xóa khách hàng
                 _context.Remove(khachhang);
                 await _context.SaveChangesAsync();
+
+                // Xóa khách hàng trong tệp CSV
+                var csvPath = "./CSVhelper/KhachHang.csv";
+                var records = new List<KhachhangModels>(); // Danh sách tất cả các bản ghi trong tệp CSV
+
+                // Đọc tất cả các bản ghi từ tệp CSV
+                using (var reader = new StreamReader(csvPath))
+                using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+                {
+                    records = csv.GetRecords<KhachhangModels>().ToList();
+                }
+
+                // Loại bỏ bản ghi tương ứng trong danh sách
+                var recordToDelete = records.FirstOrDefault(r => r.Makhachhang == id);
+                if (recordToDelete != null)
+                {
+                    records.Remove(recordToDelete);
+
+                    // Ghi lại dữ liệu đã chỉnh sửa vào tệp CSV
+                    using (var writer = new StreamWriter(csvPath, false))
+                    using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
+                    {
+                        csv.WriteRecords(records);
+                        await writer.FlushAsync();
+                    }
+                }
             }
         }
+
     }
 }

@@ -250,3 +250,4 @@ C:\Users\Xin chao Duy Tan\Desktop\web_movie\sell_movie\sell_movie\bin\Debug\net6
 C:\Users\Xin chao Duy Tan\Desktop\web_movie\sell_movie\sell_movie\bin\Debug\net6.0\AutoMapper.dll
 C:\Users\Xin chao Duy Tan\Desktop\web_movie\sell_movie\sell_movie\bin\Debug\net6.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
 C:\Users\Xin chao Duy Tan\Desktop\web_movie\sell_movie\sell_movie\bin\Debug\net6.0\Microsoft.Extensions.Logging.Filter.dll
+C:\Users\Xin chao Duy Tan\Desktop\web_movie\sell_movie\sell_movie\bin\Debug\net6.0\CsvHelper.dll

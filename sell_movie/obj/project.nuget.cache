@@ -1,11 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "zv2haLrdBBpP+mm9jr2IfI5bwL5mF8z3MSsULAV991TbyRrmVdo5FDkWSntaH5+XXZgZvNxYRboUwlicNmENIg==",
+  "dgSpecHash": "T76g785e2sOVPjH6LANROzKNlAZb3iBIzNMkSFs45LhZB6ttskx1tSICncneUM3Xb7artWBMGVDKPpxRC5zAdw==",
   "success": true,
   "projectFilePath": "C:\\Users\\Xin chao Duy Tan\\Desktop\\web_movie\\sell_movie\\sell_movie\\sell_movie.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Xin chao Duy Tan\\.nuget\\packages\\automapper\\12.0.1\\automapper.12.0.1.nupkg.sha512",
     "C:\\Users\\Xin chao Duy Tan\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\12.0.1\\automapper.extensions.microsoft.dependencyinjection.12.0.1.nupkg.sha512",
+    "C:\\Users\\Xin chao Duy Tan\\.nuget\\packages\\csvhelper\\30.0.1\\csvhelper.30.0.1.nupkg.sha512",
     "C:\\Users\\Xin chao Duy Tan\\.nuget\\packages\\humanizer\\2.14.1\\humanizer.2.14.1.nupkg.sha512",
     "C:\\Users\\Xin chao Duy Tan\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\Xin chao Duy Tan\\.nuget\\packages\\humanizer.core.af\\2.14.1\\humanizer.core.af.2.14.1.nupkg.sha512",

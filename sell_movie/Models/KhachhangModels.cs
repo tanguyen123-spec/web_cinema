@@ -1,14 +1,24 @@
-﻿using System;
+﻿using CsvHelper.Configuration.Attributes;
+using System;
 using System.Collections.Generic;
 
 namespace sell_movie.Models
 {
     public partial class KhachhangModels
     {
-        public string Makhachhang { get; set; } = null!;
-        public string Tenkhachhang { get; set; } = null!;
-        public string Diachi { get; set; } = null!;
+        [Name("Makhachhang")]
+        public string Makhachhang { get; set; }
+
+        [Name(" Tenkhachhang")]
+        public string Tenkhachhang { get; set; }
+
+        [Name(" Diachi")]
+        public string Diachi { get; set; }
+
+        [Name(" Gioitinh")]
         public bool Gioitinh { get; set; }
-        public string Sdt { get; set; } = null!;
+
+        [Name(" Sdt")]
+        public string Sdt { get; set; }
     }
 }

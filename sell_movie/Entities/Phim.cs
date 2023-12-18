@@ -1,4 +1,5 @@
-﻿using System;
+﻿using sell_movie.Models;
+using System;
 using System.Collections.Generic;
 
 namespace sell_movie.Entities
@@ -24,5 +25,8 @@ namespace sell_movie.Entities
         public virtual Quocgium MaQuocGiaNavigation { get; set; } = null!;
         public virtual Theloai MaTlNavigation { get; set; } = null!;
         public virtual ICollection<Lichchieuphim> Lichchieuphims { get; set; }
+      
+
+
     }
 }

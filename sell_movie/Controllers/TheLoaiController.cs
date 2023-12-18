@@ -10,8 +10,8 @@ namespace sell_movie.Controllers
     [ApiController]
     public class TheLoaiController : ControllerBase
     {
-        private TheLoaiServices services_;
-        public TheLoaiController(TheLoaiServices services)
+        private ITheLoaiService services_;
+        public TheLoaiController(ITheLoaiService services)
         {
             services_ = services;
         }

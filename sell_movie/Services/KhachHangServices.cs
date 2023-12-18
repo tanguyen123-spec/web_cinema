@@ -7,12 +7,48 @@ using System.Globalization;
 
 namespace sell_movie.Services
 {
-    public class KhachHangServices : MyRepository<Khachhang>
+    public interface IKhachHangService
     {
+        Task<IEnumerable<Khachhang>> GetAll();
+        Task<Khachhang> GetById(string id);
+        Task AddByModels(KhachhangModels khachhang);
+        Task Create(Khachhang entity);
+        Task Update(string id, Khachhang entity);
+        Task Delete(string id);
+        Task Delete2(string id);
+    }
+    public class KhachHangServices : IKhachHangService
+    {
+        private readonly IRepository<Khachhang> _repository;
         private readonly web_cinema3Context _context;
-        public KhachHangServices(web_cinema3Context context) : base(context)
+        public KhachHangServices(IRepository<Khachhang> repository, web_cinema3Context context) 
         {
+            _repository = repository;
             _context = context;
+        }
+        public async Task Create(Khachhang entity)
+        {
+            await _repository.Create(entity);
+        }
+
+        public async Task Delete(string id)
+        {
+            await _repository.Delete(id);
+        }
+        
+        public async Task<IEnumerable<Khachhang>> GetAll()
+        {
+            return await _repository.GetAll();
+        }
+
+        public async Task<Khachhang> GetById(string id)
+        {
+            return await _repository.GetById(id);
+        }
+
+        public async Task Update(string id, Khachhang entity)
+        {
+            await _repository.Update(id, entity);
         }
         public async Task AddByModels(KhachhangModels khachhang)
         {
@@ -68,7 +104,7 @@ namespace sell_movie.Services
                 await writer.FlushAsync();
             }
         }
-        public async Task Delete(string id)
+        public async Task Delete2(string id)
         {
             var khachhang = await GetById(id);
 

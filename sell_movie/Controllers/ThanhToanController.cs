@@ -10,8 +10,8 @@ namespace sell_movie.Controllers
     [ApiController]
     public class ThanhToanController : ControllerBase
     {
-        private readonly ThanhToanServices services_;
-        public ThanhToanController(ThanhToanServices services_)
+        private readonly IThanhToanService services_;
+        public ThanhToanController(IThanhToanService services_)
         {
             this.services_ = services_;
         }

@@ -1,11 +1,71 @@
 {
   "Version": 1,
-  "Hash": "A4IvHdbTrMx1G2gTY4hBUgx1NHuQiYoy1dEG028xoPk=",
+  "Hash": "2NN4WYXQqDrKZOiIGmA46GMHry78xUrAwX+TYArZE38=",
   "Source": "sell_movie",
   "BasePath": "_content/sell_movie",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [],
-  "DiscoveryPatterns": [],
-  "Assets": []
+  "DiscoveryPatterns": [
+    {
+      "Name": "sell_movie\\wwwroot",
+      "Source": "sell_movie",
+      "ContentRoot": "C:\\Users\\Xin chao Duy Tan\\Desktop\\web_movie\\sell_movie\\sell_movie\\wwwroot\\",
+      "BasePath": "_content/sell_movie",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": [
+    {
+      "Identity": "C:\\Users\\Xin chao Duy Tan\\Desktop\\web_movie\\sell_movie\\sell_movie\\wwwroot\\Uploads\\common\\noimage.jpg",
+      "SourceId": "sell_movie",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Xin chao Duy Tan\\Desktop\\web_movie\\sell_movie\\sell_movie\\wwwroot\\",
+      "BasePath": "_content/sell_movie",
+      "RelativePath": "Uploads/common/noimage.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\Uploads\\common\\noimage.jpg"
+    },
+    {
+      "Identity": "C:\\Users\\Xin chao Duy Tan\\Desktop\\web_movie\\sell_movie\\sell_movie\\wwwroot\\Uploads\\Phim\\logo.png\\image.png",
+      "SourceId": "sell_movie",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Xin chao Duy Tan\\Desktop\\web_movie\\sell_movie\\sell_movie\\wwwroot\\",
+      "BasePath": "_content/sell_movie",
+      "RelativePath": "Uploads/Phim/logo.png/image.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\Uploads\\Phim\\logo.png\\image.png"
+    },
+    {
+      "Identity": "C:\\Users\\Xin chao Duy Tan\\Desktop\\web_movie\\sell_movie\\sell_movie\\wwwroot\\Uploads\\Phim\\PH001\\image.png",
+      "SourceId": "sell_movie",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Xin chao Duy Tan\\Desktop\\web_movie\\sell_movie\\sell_movie\\wwwroot\\",
+      "BasePath": "_content/sell_movie",
+      "RelativePath": "Uploads/Phim/PH001/image.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\Uploads\\Phim\\PH001\\image.png"
+    }
+  ]
 }

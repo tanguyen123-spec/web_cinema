@@ -10,8 +10,8 @@ namespace sell_movie.Controllers
     [ApiController]
     public class TdKhachHangController : ControllerBase
     {
-        private readonly TdKhachHangServices _services;
-        public TdKhachHangController(TdKhachHangServices services)
+        private readonly ITdKhachHangService _services;
+        public TdKhachHangController(ITdKhachHangService services)
         {
             _services = services;
         }

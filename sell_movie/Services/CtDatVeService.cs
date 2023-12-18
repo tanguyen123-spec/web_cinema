@@ -6,12 +6,49 @@ using sell_movie.Repository;
 
 namespace sell_movie.Services
 {
-    public class CtdatveService : MyRepository<Ctdatve>
+    public interface ICtDatVeService
     {
+        Task<IEnumerable<Ctdatve>> GetAll();
+        Task<Ctdatve> GetById(string id);
+        Task Create(Ctdatve entity);
+        Task CreatebyModels(CtdatveModels ctdatve);
+        Task Update(string id, Ctdatve entity);
+        Task Delete(string id);
+
+    }
+    public class Ctdatveservice : ICtDatVeService
+    {
+        private readonly IRepository<Ctdatve> _repository;
         private readonly web_cinema3Context _context;
-        public CtdatveService(web_cinema3Context context) : base(context)
+        public Ctdatveservice(IRepository<Ctdatve> repository, web_cinema3Context context) 
         {
+            _repository = repository;
             _context = context;
+        }
+
+        public async Task Create(Ctdatve entity)
+        {
+            await _repository.Create(entity);
+        }
+
+        public async Task Delete(string id)
+        {
+            await _repository.Delete(id);
+        }
+
+        public async Task<IEnumerable<Ctdatve>> GetAll()
+        {
+            return await _repository.GetAll();
+        }
+
+        public async Task<Ctdatve> GetById(string id)
+        {
+            return await _repository.GetById(id);
+        }
+
+        public async Task Update(string id, Ctdatve entity)
+        {
+             await _repository.Update(id, entity);
         }
         public async Task CreatebyModels(CtdatveModels ctdatve)
         {

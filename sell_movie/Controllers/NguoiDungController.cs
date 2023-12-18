@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using sell_movie.Entities;
 using sell_movie.Models;
@@ -10,12 +11,14 @@ namespace sell_movie.Controllers
     [ApiController]
     public class NguoiDungController : ControllerBase
     {
-        private readonly NguoiDungServices services_;
-        public NguoiDungController(NguoiDungServices services_)
+        private readonly INguoiDungService services_;
+        public NguoiDungController(INguoiDungService services_)
         {
             this.services_ = services_;
         }
+        
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetAll()
         {
             var result = await services_.GetAll();

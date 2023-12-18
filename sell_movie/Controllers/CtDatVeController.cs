@@ -1,37 +1,33 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using sell_movie.Entities;
 using sell_movie.Models;
 using sell_movie.Services;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using AutoMapper;
-using sell_movie.Entities;
 
 namespace sell_movie.Controllers
 {
-    [ApiController]
     [Route("api/[controller]")]
+    [ApiController]
     public class CtdatveController : ControllerBase
     {
-        private readonly CtdatveService _ctdatveService;
+        private readonly ICtDatVeService _ctDatVeService;
 
-        public CtdatveController(CtdatveService ctdatveService)
+        public CtdatveController(ICtDatVeService ctDatVeService)
         {
-            _ctdatveService = ctdatveService;
+            _ctDatVeService = ctDatVeService;
         }
 
-        // Endpoint for retrieving all Ctdatve entities
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var ctdatves = await _ctdatveService.GetAll();
+            var ctdatves = await _ctDatVeService.GetAll();
             return Ok(ctdatves);
         }
 
-        // Endpoint for retrieving a specific Ctdatve entity by ID
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(string id)
         {
-            var ctdatve = await _ctdatveService.GetById(id);
+            var ctdatve = await _ctDatVeService.GetById(id);
             if (ctdatve == null)
             {
                 return NotFound();
@@ -39,47 +35,30 @@ namespace sell_movie.Controllers
             return Ok(ctdatve);
         }
 
-        // Endpoint for adding a new Ctdatve entity
         [HttpPost]
-        public async Task<IActionResult> Add(Ctdatve ctdatveentiti)
+        public async Task<IActionResult> Create([FromBody] CtdatveModels ctdatve)
         {
-            if(ctdatveentiti == null)
+            if (!ModelState.IsValid)
             {
-                return BadRequest();
+                return BadRequest(ModelState);
             }
-            await _ctdatveService.Create(ctdatveentiti);
+
+            await _ctDatVeService.CreatebyModels(ctdatve);
             return Ok();
-            
         }
 
-        [HttpPost("add-by-models")]
-        public async Task<IActionResult> AddCtBymodel(CtdatveModels ct)
-        {
-            if (ct == null)
-            {
-                return BadRequest();
-            }
-            await _ctdatveService.CreatebyModels(ct);
-            return Ok();
-        }
-        // Endpoint for updating an existing Ctdatve entity
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(string id,  Ctdatve ctDatve)
+        public async Task<IActionResult> Update(string id, [FromBody] Ctdatve entity)
         {
-            if (ctDatve == null)
-            {
-                return BadRequest();
-            }
-            await _ctdatveService.Update(id, ctDatve);
+            await _ctDatVeService.Update(id, entity);
             return Ok();
         }
 
-        // Endpoint for deleting a specific Ctdatve entity by ID
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(string id)
         {
-            await _ctdatveService.Delete(id);
-            return Ok("Ctdatve deleted successfully.");
+            await _ctDatVeService.Delete(id);
+            return Ok();
         }
     }
 }

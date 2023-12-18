@@ -1,0 +1,33 @@
+{
+  "Files": [
+    {
+      "Id": "C:\\Users\\Xin chao Duy Tan\\Desktop\\web_movie\\sell_movie\\sell_movie\\wwwroot\\Uploads\\Phim\\PH001\\image.png",
+      "PackagePath": "staticwebassets\\Uploads\\Phim\\PH001\\image.png"
+    },
+    {
+      "Id": "C:\\Users\\Xin chao Duy Tan\\Desktop\\web_movie\\sell_movie\\sell_movie\\wwwroot\\Uploads\\Phim\\logo.png\\image.png",
+      "PackagePath": "staticwebassets\\Uploads\\Phim\\logo.png\\image.png"
+    },
+    {
+      "Id": "C:\\Users\\Xin chao Duy Tan\\Desktop\\web_movie\\sell_movie\\sell_movie\\wwwroot\\Uploads\\common\\noimage.jpg",
+      "PackagePath": "staticwebassets\\Uploads\\common\\noimage.jpg"
+    },
+    {
+      "Id": "obj\\Debug\\net6.0\\staticwebassets\\msbuild.build.sell_movie.props",
+      "PackagePath": "build\\sell_movie.props"
+    },
+    {
+      "Id": "obj\\Debug\\net6.0\\staticwebassets\\msbuild.buildMultiTargeting.sell_movie.props",
+      "PackagePath": "buildMultiTargeting\\sell_movie.props"
+    },
+    {
+      "Id": "obj\\Debug\\net6.0\\staticwebassets\\msbuild.buildTransitive.sell_movie.props",
+      "PackagePath": "buildTransitive\\sell_movie.props"
+    },
+    {
+      "Id": "obj\\Debug\\net6.0\\staticwebassets\\msbuild.sell_movie.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    }
+  ],
+  "ElementsToRemove": []
+}

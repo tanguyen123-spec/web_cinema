@@ -7,6 +7,11 @@ using AutoMapper;
 
 using sell_movie.Models;
 using sell_movie.Filters;
+using Microsoft.Extensions.FileProviders;
+using System.Text;
+using sell_movie.Secure.Key;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
@@ -25,38 +30,84 @@ builder.Services.AddCors(options =>
                       });
 });
 // Add services to the container.
-builder.Services.AddControllers(options =>
-{
-    options.Filters.Add(new MyFilterAtribute("Global"));
-    options.Filters.Add(new MyFilterResourceFilter("Global"));
-    options.Filters.AddService<MyFilterResultFilterAttribute>();
+builder.Services.AddControllers(
+//options =>
+//{
+//    options.Filters.Add(new MyFilterAtribute("Global"));
+//    options.Filters.Add(new MyFilterResourceFilter("Global"));
+//    options.Filters.AddService<MyFilterResultFilterAttribute>();
 
-
-});
+    //}
+);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddDbContext<web_cinema3Context>();
-builder.Services.AddTransient<MyFilterResultFilterAttribute>();
-builder.Services.AddScoped<GheServices>();
-builder.Services.AddScoped<PhongServices>();
-builder.Services.AddScoped<CtdatveService>();
-builder.Services.AddScoped<TdKhachHangServices>();
-builder.Services.AddScoped<TheLoaiServices>();
-builder.Services.AddScoped<LichChieuPhimServices>();
-builder.Services.AddScoped<TtDatVeServices>();
-builder.Services.AddScoped<TrangThaiGheServices>();
-builder.Services.AddScoped<KhachHangServices>();
-builder.Services.AddScoped<NguoiDungServices>();
-builder.Services.AddScoped<GiaVeServices>();
+//builder.Services.AddTransient<MyFilterResultFilterAttribute>();
+builder.Services.AddScoped<IGheService, GheServices>();
+builder.Services.AddScoped<IPhongService, PhongServices>();
+builder.Services.AddScoped<ICtDatVeService, Ctdatveservice>();
+builder.Services.AddScoped<ITdKhachHangService, TdKhachHangServices>();
+builder.Services.AddScoped<ITheLoaiService, TheLoaiServices>();
+builder.Services.AddScoped<ILichChieuPhimService, LichChieuPhimServices>();
+builder.Services.AddScoped<ITtDatVeService, TtDatVeServices>();
+builder.Services.AddScoped<ITrangThaiGheService, TrangThaiGheServices>();
+builder.Services.AddScoped<IKhachHangService, KhachHangServices>();
+builder.Services.AddScoped<INguoiDungService, NguoiDungServices>();
+builder.Services.AddScoped<IGiaVeService, GiaVeServices>();
 builder.Services.AddScoped(typeof(IRepository<>), typeof(MyRepository<>));
-builder.Services.AddScoped<LichChieuServices>();
-builder.Services.AddScoped<DisInforService>();
-builder.Services.AddScoped<PhimServices>();
-builder.Services.AddScoped<NhanVienServices>();
-builder.Services.AddScoped<GetIdGheService>();
-builder.Services.AddScoped<GetPhimByIDNgayChieuService>();
+builder.Services.AddScoped<ILichChieuService, LichChieuServices>();
+builder.Services.AddScoped<IDisInforService, DisInforService>();
+builder.Services.AddScoped<IPhimService, PhimServices>();
+builder.Services.AddScoped<INhanVienService, NhanVienServices>();
+builder.Services.AddScoped<IGetIDGheService, GetIdGheService>();
+builder.Services.AddScoped<IQuocGiaService, QuocGiaServices>();
+builder.Services.Configure<AppSetting>(builder.Configuration.GetSection("AppSettings"));
+//lấy giá trị secretkey
+var secretKey = builder.Configuration["AppSettings:SecretKey"];
+//chuyển đổi từ string sang mảng byte
+//SymmetricSecurityKey, được sử dụng trong JWT,
+//yêu cầu secret key ở dạng mảng byte.
+var secretKeyBytes = Encoding.UTF8.GetBytes(secretKey);
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(opt =>
+    {
+        opt.TokenValidationParameters = new TokenValidationParameters
+        {
+            //tự cấp token
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            //ký vào token
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(secretKeyBytes),
+            ClockSkew = TimeSpan.Zero,
+        };
+        opt.Events = new JwtBearerEvents
+        {
+            OnMessageReceived = context =>
+            {
+                context.Token = context.Request.Headers["Authorization"].FirstOrDefault()?.Replace("Bearer ", "");
+                Console.WriteLine($"Đã Nhận token");
+                return Task.CompletedTask;
+            }
+        };
+        opt.Events = new JwtBearerEvents
+        {
+            OnMessageReceived = context =>
+            {
+                context.Token = context.Request.Headers["Authorization"].FirstOrDefault()?.Replace("Bearer ", "");
+                Console.WriteLine($"Đã Nhận token");
+                return Task.CompletedTask;
+            }
+        };
+    });
+
+builder.Services.AddAuthorization();
+builder.Services.AddControllers();
 
 
+
+builder.Services.AddScoped<IGetPhimByIdNgayChieuService, GetPhimByIDNgayChieuService>();
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
@@ -69,6 +120,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseStaticFiles();
 app.UseCors(MyAllowSpecificOrigins);
 
 app.UseAuthorization();

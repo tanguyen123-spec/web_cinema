@@ -7,12 +7,48 @@ using sell_movie.Repository;
 
 namespace sell_movie.Services
 {
-    public class TheLoaiServices : MyRepository<Theloai>
+    public interface ITheLoaiService
     {
+        Task<IEnumerable<Theloai>> GetAll();
+        Task<IEnumerable<TheloaiModels>> GetAll2();
+        Task<Theloai> GetById(string id);
+        Task Create(Theloai entity);
+        Task CreatebyModels(TheloaiModels theloai);
+        Task Update(string id, Theloai entity);
+        Task Delete(string id);
+    }
+    public class TheLoaiServices : ITheLoaiService
+    {
+        private readonly IRepository<Theloai> _repository;
         private readonly web_cinema3Context _context;
-        public TheLoaiServices(web_cinema3Context context) : base(context) 
+        public TheLoaiServices(IRepository<Theloai> repository, web_cinema3Context context) 
         {
+            _repository = repository;
             _context = context;
+        }
+        public async Task Create(Theloai entity)
+        {
+            await _repository.Create(entity);
+        }
+
+        public async Task Delete(string id)
+        {
+            await _repository.Delete(id);
+        }
+
+        public async Task<IEnumerable<Theloai>> GetAll()
+        {
+            return await _repository.GetAll();
+        }
+
+        public async Task<Theloai> GetById(string id)
+        {
+            return await _repository.GetById(id);
+        }
+
+        public async Task Update(string id, Theloai entity)
+        {
+            await _repository.Update(id, entity);
         }
         public async Task<IEnumerable<TheloaiModels>> GetAll2()
         {

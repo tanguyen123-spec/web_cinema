@@ -10,8 +10,8 @@ namespace sell_movie.Controllers
     [ApiController]
     public class TrangThaiGheController : ControllerBase
     {
-        private readonly TrangThaiGheServices _services;
-        public TrangThaiGheController(TrangThaiGheServices services)
+        private readonly ITrangThaiGheService _services;
+        public TrangThaiGheController(ITrangThaiGheService services)
         {
             _services = services;
         }

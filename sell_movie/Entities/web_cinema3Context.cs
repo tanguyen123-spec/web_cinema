@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using sell_movie.Models;
+using sell_movie.Secure.Data;
 
 namespace sell_movie.Entities
 {
@@ -16,6 +17,7 @@ namespace sell_movie.Entities
             : base(options)
         {
         }
+        public virtual DbSet<RefreshToken> RefreshTokens { get; set; }
 
         public virtual DbSet<Ctdatve> Ctdatves { get; set; } = null!;
         public virtual DbSet<Ghe> Ghes { get; set; } = null!;
@@ -44,7 +46,8 @@ namespace sell_movie.Entities
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
+        {   
+
             
             modelBuilder.Entity<Ctdatve>(entity =>
             {

@@ -5,12 +5,48 @@ using sell_movie.Repository;
 
 namespace sell_movie.Services
 {
-    public class NhanVienServices : MyRepository<Nhanvien>
+    public interface INhanVienService
     {
+        Task<IEnumerable<Nhanvien>> GetAll();
+        Task<Nhanvien> GetById(string id);
+        Task Create(Nhanvien entity);
+        Task CreatebyModels(NhanvienModels nhanvien);
+        Task Update(string id, Nhanvien entity);
+        Task Delete(string id);
+        Task Delete2(string id);
+    }
+    public class NhanVienServices : INhanVienService
+    {
+        private readonly IRepository<Nhanvien> _repository;
         private readonly web_cinema3Context context_;
-        public NhanVienServices(web_cinema3Context context) : base(context)
+        public NhanVienServices(IRepository<Nhanvien> repository, web_cinema3Context context) 
         {
+            _repository = repository;
             context_ = context;
+        }
+        public async Task Create(Nhanvien entity)
+        {
+            await _repository.Create(entity);
+        }
+
+        public async Task Delete(string id)
+        {
+            await _repository.Delete(id);
+        }
+
+        public async Task<IEnumerable<Nhanvien>> GetAll()
+        {
+            return await _repository.GetAll();
+        }
+
+        public async Task<Nhanvien> GetById(string id)
+        {
+            return await _repository.GetById(id);
+        }
+
+        public async Task Update(string id, Nhanvien entity)
+        {
+            await _repository.Update(id, entity);
         }
         public async Task CreatebyModels(NhanvienModels nhanvien)
         {
@@ -46,7 +82,7 @@ namespace sell_movie.Services
             context_.Nguoidungs.Add(nguoidung);
             await context_.SaveChangesAsync();
         }
-        public async Task Delete(string id)
+        public async Task Delete2(string id)
         {
             var nhanvien = await GetById(id)
 ;

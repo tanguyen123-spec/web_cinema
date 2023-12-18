@@ -9,8 +9,8 @@ namespace sell_movie.Controllers
     [ApiController]
     public class GetPhimByNgayChieuController : ControllerBase
     {
-        private readonly GetPhimByIDNgayChieuService _service;
-        public GetPhimByNgayChieuController(GetPhimByIDNgayChieuService service)
+        private readonly IGetPhimByIdNgayChieuService _service;
+        public GetPhimByNgayChieuController(IGetPhimByIdNgayChieuService service)
         {
             _service = service;
         }

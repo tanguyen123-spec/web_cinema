@@ -11,9 +11,9 @@ using sell_movie.Services;
 [ApiController]
 public class PhongController : ControllerBase
 {
-    private readonly PhongServices _services;
+    private readonly IPhongService _services;
 
-    public PhongController(PhongServices services)
+    public PhongController(IPhongService services)
     {
         _services = services ?? throw new ArgumentNullException(nameof(services));
     }

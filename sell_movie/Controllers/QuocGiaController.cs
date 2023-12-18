@@ -10,8 +10,8 @@ namespace sell_movie.Controllers
     [ApiController]
     public class QuocGiaController : ControllerBase
     {
-        private QuocGiaServices services_;
-        public QuocGiaController(QuocGiaServices services_)
+        private readonly IQuocGiaService services_;
+        public QuocGiaController(IQuocGiaService services_)
         {
             this.services_ = services_;
         }

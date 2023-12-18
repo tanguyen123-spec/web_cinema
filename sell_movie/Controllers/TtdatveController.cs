@@ -10,8 +10,8 @@ namespace sell_movie.Controllers
     [ApiController]
     public class TtDatVeController : ControllerBase
     {
-        private readonly TtDatVeServices _services;
-        public TtDatVeController(TtDatVeServices services)
+        private readonly ITtDatVeService _services;
+        public TtDatVeController(ITtDatVeService services)
         {
             _services = services;
         }

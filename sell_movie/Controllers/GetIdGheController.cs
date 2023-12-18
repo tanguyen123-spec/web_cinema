@@ -9,9 +9,9 @@ namespace sell_movie.Controllers
     [ApiController]
     public class GetIdGheController : ControllerBase
     {
-        private readonly GetIdGheService _Service;
+        private readonly IGetIDGheService _Service;
 
-        public GetIdGheController(GetIdGheService Service)
+        public GetIdGheController(IGetIDGheService Service)
         {
             _Service = Service;
         }

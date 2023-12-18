@@ -8,17 +8,54 @@ using System.Text.Json.Serialization;
 
 namespace sell_movie.Services
 {
-    public class LichChieuPhimServices : MyRepository<Lichchieuphim>
+    public interface ILichChieuPhimService
     {
-        private readonly web_cinema3Context context_;
+        Task<IEnumerable<Lichchieuphim>> GetAll();
+        Task<Lichchieuphim> GetById(string id);
+        Task<List<Ghe>> GetGheByTenPhimVaGioChieu(GeTGhemodel tGhemodel, string tenPhim, DateTime gioChieu);
+        Task<List<LichChieuPhimInfo>> GetAllLichChieuPhimInfo();
+        Task Create(Lichchieuphim entity);
+        Task CreatebyModels(LichchieuphimModels lichchieuphim);
+        Task Update(string id, Lichchieuphim entity);
+        Task Delete(string id);
+    }
+    public class LichChieuPhimServices : ILichChieuPhimService
+    {
+        private readonly IRepository<Lichchieuphim> _repository;
         private readonly JsonSerializerOptions jsonOptions_;
-        public LichChieuPhimServices(web_cinema3Context context) : base(context)
+        private readonly web_cinema3Context context_;
+        public LichChieuPhimServices(IRepository<Lichchieuphim> repository, web_cinema3Context context_)
         {
-            context_ = context;
+            _repository = repository;
             jsonOptions_ = new JsonSerializerOptions
             {
                 ReferenceHandler = ReferenceHandler.Preserve
             };
+            this.context_ = context_;
+        }
+        public async Task Create(Lichchieuphim entity)
+        {
+            await _repository.Create(entity);
+        }
+
+        public async Task Delete(string id)
+        {
+            await _repository.Delete(id);
+        }
+
+        public async Task<IEnumerable<Lichchieuphim>> GetAll()
+        {
+            return await _repository.GetAll();
+        }
+
+        public async Task<Lichchieuphim> GetById(string id)
+        {
+            return await _repository.GetById(id);
+        }
+
+        public async Task Update(string id, Lichchieuphim entity)
+        {
+            await _repository.Update(id, entity);
         }
         public async Task CreatebyModels(LichchieuphimModels lichchieuphim)
         {
@@ -47,7 +84,7 @@ namespace sell_movie.Services
         public async Task<List<Ghe>> GetGheByTenPhimVaGioChieu(GeTGhemodel tGhemodel, string tenPhim, DateTime gioChieu)
         {
             // Truy vấn bảng Lichchieus để lấy mã lịch chiếu dựa trên thông tin giờ chiếu và ngày chiếu
-            var lichchieu = context_.Lichchieus.FirstOrDefault(lc =>
+            var lichchieu =  context_.Lichchieus.FirstOrDefault(lc =>
                 lc.GioChieu == new TimeSpan(tGhemodel.Gio, tGhemodel.Phut, 0));
             if (lichchieu != null)
             {

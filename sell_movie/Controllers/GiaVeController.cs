@@ -10,8 +10,8 @@ namespace sell_movie.Controllers
     [ApiController]
     public class GiaVeController : ControllerBase
     {
-        private readonly GiaVeServices services_;
-        public GiaVeController(GiaVeServices services)
+        private readonly IGiaVeService services_;
+        public GiaVeController(IGiaVeService services)
         {
             services_ = services;
         }

@@ -5,11 +5,21 @@ using sell_movie.Repository;
 
 namespace sell_movie.Services
 {
-    public class DisInforService : MyRepository<DisInforModel>
+    public interface IDisInforService
+    {
+        public void ThemDatVe(DisInforModel disInfor);
+        public int GenerateMaDatVe();
+        public string GenerateMaThanhToan();
+        public string LayMaLichPhim(DisInforModel disInfor);
+        public string LayMaLichChieu(DisInforModel disInfor);
+        public bool KiemTraMaGhe(string maGhe);
+        public bool KiemTraTrangThaiGhe(string maGhe);
+    }
+    public class DisInforService : IDisInforService
     {
         private readonly web_cinema3Context _context;
 
-        public DisInforService(web_cinema3Context context) : base(context)
+        public DisInforService(web_cinema3Context context)
         {
             _context = context;
         }
@@ -98,12 +108,12 @@ namespace sell_movie.Services
 
         }
 
-        private int GenerateMaDatVe()
+        public int GenerateMaDatVe()
         {
             Random random = new Random();
             return random.Next();
         }
-        private string GenerateMaThanhToan()
+        public string GenerateMaThanhToan()
         {
             Random random = new Random();
             return random.Next().ToString();

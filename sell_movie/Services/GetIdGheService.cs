@@ -4,11 +4,15 @@ using sell_movie.Repository;
 
 namespace sell_movie.Services
 {
-    public class GetIdGheService : MyRepository<GeTGhemodel>
+    public interface IGetIDGheService
+    {
+        Task<List<GheWithTrangThaiModel>> GetGheByTenPhimVaGioChieu(GeTGhemodel tGhemodel);
+    }
+    public class GetIdGheService : IGetIDGheService
     {
         private readonly web_cinema3Context context_;
 
-        public GetIdGheService(web_cinema3Context context) : base(context)
+        public GetIdGheService(web_cinema3Context context) 
         {
             context_ = context;
         }

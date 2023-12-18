@@ -10,8 +10,8 @@ namespace sell_movie.Controllers
     [ApiController]
     public class KhachHangController : ControllerBase
     {
-        private readonly KhachHangServices services_;
-        public KhachHangController(KhachHangServices services_)
+        private readonly IKhachHangService services_;
+        public KhachHangController(IKhachHangService services_)
         {
             this.services_ = services_;
         }

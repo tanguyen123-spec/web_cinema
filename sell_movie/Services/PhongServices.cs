@@ -5,14 +5,48 @@ using sell_movie.Repository;
 
 namespace sell_movie.Services
 {
-    public class PhongServices : MyRepository<Phong>
+    public interface IPhongService
     {
+        Task<IEnumerable<Phong>> GetAll();
+        Task<Phong> GetById(string id);
+        Task Create(Phong entity);
+        Task CustomCreate(PhongModels phong);
+        Task Update(string id, Phong entity);
+        Task Delete(string id);
+        Task DeleteGhe(string id);
+    }
+    public class PhongServices : IPhongService
+    {
+        private readonly IRepository<Phong> _repository;
         private readonly web_cinema3Context _context;
-        
-        public PhongServices(web_cinema3Context context) : base(context)
+        public PhongServices(IRepository<Phong> repository, web_cinema3Context context)
         {
+            _repository = repository;
             _context = context;
-           
+        }
+        public async Task Create(Phong entity)
+        {
+            await _repository.Create(entity);
+        }
+
+        public async Task Delete(string id)
+        {
+            await _repository.Delete(id);
+        }
+
+        public async Task<IEnumerable<Phong>> GetAll()
+        {
+            return await _repository.GetAll();
+        }
+
+        public async Task<Phong> GetById(string id)
+        {
+            return await _repository.GetById(id);
+        }
+
+        public async Task Update(string id, Phong entity)
+        {
+            await _repository.Update(id, entity);
         }
         public async Task CustomCreate(PhongModels phong)
         {
@@ -38,18 +72,6 @@ namespace sell_movie.Services
                     };
                     Phong.Ghes.Add(ghe);
                 }
-            }
-
-            foreach (var ghe in Phong.Ghes)
-            {
-                var ttg = new Trangthaighe
-                {
-                    Maghe = ghe.MaGhe,
-                    MaPhong = Phong.MaPhong,
-                    TrangThai = 1,
-                    MaLichChieu = "LC001"
-                };
-                _context.Add(ttg);
             }
 
             _context.Add(Phong);

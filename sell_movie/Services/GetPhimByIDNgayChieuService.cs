@@ -5,10 +5,14 @@ using sell_movie.Repository;
 
 namespace sell_movie.Services
 {
-    public class GetPhimByIDNgayChieuService : MyRepository<GetPhimByIDNgayChieumodels>
+    public interface IGetPhimByIdNgayChieuService
+    {
+        Task<List<PhimGioChieu>> GetPhimGioChieuByIDNgayChieu(GetPhimByIDNgayChieumodels phim);
+    }
+    public class GetPhimByIDNgayChieuService : IGetPhimByIdNgayChieuService
     {
         private readonly web_cinema3Context _context;
-        public GetPhimByIDNgayChieuService(web_cinema3Context context) : base(context)
+        public GetPhimByIDNgayChieuService(web_cinema3Context context) 
         {
             _context = context;
         }

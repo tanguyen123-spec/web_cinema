@@ -10,8 +10,8 @@ namespace sell_movie.Controllers
     [ApiController]
     public class LichChieuController : ControllerBase
     {
-            private readonly LichChieuServices services;
-            public LichChieuController(LichChieuServices services)
+            private readonly ILichChieuService services;
+            public LichChieuController(ILichChieuService services)
             {
                 this.services = services;
             }

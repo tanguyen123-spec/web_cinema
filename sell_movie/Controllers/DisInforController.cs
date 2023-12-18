@@ -9,9 +9,9 @@ namespace sell_movie.Controllers
     [ApiController]
     public class DisInforController : ControllerBase
     {
-        private readonly DisInforService _disInforService;
+        private readonly IDisInforService _disInforService;
 
-        public DisInforController(DisInforService disInforService)
+        public DisInforController(IDisInforService disInforService)
         {
             _disInforService = disInforService;
         }

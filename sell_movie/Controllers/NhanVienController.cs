@@ -10,8 +10,8 @@ namespace sell_movie.Controllers
     [ApiController]
     public class NhanVienController : ControllerBase
     {
-        private readonly NhanVienServices services_;
-        public NhanVienController(NhanVienServices services_)
+        private readonly INhanVienService services_;
+        public NhanVienController(INhanVienService services_)
         {
             this.services_ = services_;
         }

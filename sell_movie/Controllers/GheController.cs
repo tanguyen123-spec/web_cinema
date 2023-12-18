@@ -10,8 +10,8 @@ namespace sell_movie.Controllers
     [ApiController]
     public class GheController : ControllerBase
     {
-        private readonly GheServices services_;
-        public GheController(GheServices services)
+        private readonly IGheService services_;
+        public GheController(IGheService services)
         {
             services_ = services;
         }

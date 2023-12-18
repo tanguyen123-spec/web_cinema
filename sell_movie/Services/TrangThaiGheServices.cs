@@ -6,12 +6,48 @@ using sell_movie.Repository;
 
 namespace sell_movie.Services
 {
-    public class TrangThaiGheServices : MyRepository<Trangthaighe>
+    public interface ITrangThaiGheService
     {
+        Task<IEnumerable<Trangthaighe>> GetAll();
+        Task<IEnumerable<TrangThaiGheModels>> Getall2();
+        Task<Trangthaighe> GetById(string id);
+        Task Create(Trangthaighe entity);
+        Task addTTGbyModels(TrangThaiGheModels trangThai);
+        Task Update(string id, Trangthaighe entity);
+        Task Delete(string id);
+    }
+    public class TrangThaiGheServices : ITrangThaiGheService
+    {
+        private readonly IRepository<Trangthaighe> _repository;
         private readonly web_cinema3Context _context;
-        public TrangThaiGheServices(web_cinema3Context context) : base(context)
+        public TrangThaiGheServices(IRepository<Trangthaighe> repository, web_cinema3Context context) 
         {
+            _repository = repository;
             _context = context;
+        }
+        public async Task Create(Trangthaighe entity)
+        {
+            await _repository.Create(entity);
+        }
+
+        public async Task Delete(string id)
+        {
+            await _repository.Delete(id);
+        }
+
+        public async Task<IEnumerable<Trangthaighe>> GetAll()
+        {
+            return await _repository.GetAll();
+        }
+
+        public async Task<Trangthaighe> GetById(string id)
+        {
+            return await _repository.GetById(id);
+        }
+
+        public async Task Update(string id, Trangthaighe entity)
+        {
+            await _repository.Update(id, entity);
         }
         public async Task addTTGbyModels(TrangThaiGheModels trangThai)
         {

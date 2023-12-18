@@ -12,8 +12,10 @@ namespace sell_movie.Models
         public string Anh { get; set; } = null!;
         public string Trailer { get; set; } = null!;
         public string MaTl { get; set; } = null!;
+
         public string MaQuocGia { get; set; } = null!;
         public string Banner { get; set; } = null!;
         public int Thoiluong { get; set; }
+       
     }
 }

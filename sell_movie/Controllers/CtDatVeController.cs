@@ -24,7 +24,7 @@ namespace sell_movie.Controllers
             return Ok(ctdatves);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("id/{id}")]
         public async Task<IActionResult> GetById(string id)
         {
             var ctdatve = await _ctDatVeService.GetById(id);
@@ -59,6 +59,18 @@ namespace sell_movie.Controllers
         {
             await _ctDatVeService.Delete(id);
             return Ok();
+        }
+        [HttpGet("{maDatVe}")]
+        public async Task<ActionResult<CtdatveDtocs>> GetByMaDatVe(int maDatVe)
+        {
+            var ctdatveDto = await _ctDatVeService.GetByMaDatVe(maDatVe);
+
+            if (ctdatveDto == null)
+            {
+                return NotFound();
+            }
+
+            return ctdatveDto;
         }
     }
 }

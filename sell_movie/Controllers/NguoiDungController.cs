@@ -57,13 +57,9 @@ namespace sell_movie.Controllers
             return Ok(nguoidung);
         }
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(string id, Nguoidung nguoidung)
+        public async Task<IActionResult> Update(string id, NguoidungModels nguoidung)
         {
-            if (nguoidung == null)
-            {
-                return BadRequest();
-            }
-            await services_.Update(id, nguoidung);
+            await services_.UpdateByModel(id, nguoidung);
             return Ok();
         }
 
@@ -74,5 +70,6 @@ namespace sell_movie.Controllers
             await services_.Delete(id);
             return Ok("Ctdatve deleted successfully.");
         }
+       
     }
 }

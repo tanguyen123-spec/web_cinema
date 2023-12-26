@@ -299,7 +299,9 @@ namespace sell_movie.Migrations
                     MaDatVe = table.Column<int>(type: "int", nullable: false),
                     MaNhanVien = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: false),
                     NgayThanhToan = table.Column<DateTime>(type: "date", nullable: false),
-                    phuongthucthanhtoan = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: false)
+                    phuongthucthanhtoan = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: false),
+                    TongTienThanhToan = table.Column<decimal>(type: "int(18, 2)", nullable: false)
+
                 },
                 constraints: table =>
                 {

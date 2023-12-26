@@ -14,6 +14,7 @@ namespace sell_movie.Models
         public string MaPhong { get; set; } = null!;
         public string MaPhim { get; set; } = null!;
 
+
       
     }
 }

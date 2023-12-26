@@ -17,8 +17,9 @@ namespace sell_movie.Services
         Task Update(string id, Phim entity);
         Task Delete(string id);
         Task<IEnumerable<GenreMovieModel>> GetGenresByMovieId();
-        Task UpdateImageUrl(string maPhim, string imageUrl);
-
+        Task UpdateImageUrl(string maPhim, string imageUrl, string bannerUrl);
+        Task<IEnumerable<Phim>> GetNowPlayingMovies();
+        Task<IEnumerable<Phim>> GetUpcomingMovies();
 
 
     }
@@ -131,14 +132,26 @@ namespace sell_movie.Services
                 await _repository.Update(id, existingPhim);
             }
         }
-        public async Task UpdateImageUrl(string maPhim, string imageUrl)
+        public async Task UpdateImageUrl(string maPhim, string imageUrl, string bannerUrl)
         {
             var phim = await _context.Phims.FirstOrDefaultAsync(p => p.MaPhim == maPhim);
             if (phim != null)
             {
                 phim.Anh = imageUrl;
+                phim.Banner = bannerUrl;
                 await _context.SaveChangesAsync();
             }
+        }
+        public async Task<IEnumerable<Phim>> GetNowPlayingMovies()
+        {
+            var now = DateTime.Now;
+            return await _context.Phims.Where(p => p.Ngaykhoichieu <= now).ToListAsync();
+        }
+
+        public async Task<IEnumerable<Phim>> GetUpcomingMovies()
+        {
+            var now = DateTime.Now;
+            return await _context.Phims.Where(p => p.Ngaykhoichieu > now).ToListAsync();
         }
     }
 }

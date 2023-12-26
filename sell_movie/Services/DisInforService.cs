@@ -12,8 +12,7 @@ namespace sell_movie.Services
         public string GenerateMaThanhToan();
         public string LayMaLichPhim(DisInforModel disInfor);
         public string LayMaLichChieu(DisInforModel disInfor);
-        public bool KiemTraMaGhe(string maGhe);
-        public bool KiemTraTrangThaiGhe(string maGhe);
+
     }
     public class DisInforService : IDisInforService
     {
@@ -26,86 +25,87 @@ namespace sell_movie.Services
 
         public void ThemDatVe(DisInforModel disInfor)
         {
-            // Kiểm tra xem tên phim, giờ chiếu và ngày chiếu có khớp với mã lịch chiếu phim không
             string maLichPhim = LayMaLichPhim(disInfor);
             if (string.IsNullOrEmpty(maLichPhim))
             {
                 Console.WriteLine("Không tìm thấy mã lịch chiếu phim!");
-                return; // Kết thúc việc thêm dữ liệu
+                return;
             }
 
-            // Kiểm tra tính hợp lệ của mã ghế
-            bool isMaGheValid = KiemTraMaGhe(disInfor.MaGhe);
-            if (!isMaGheValid)
-            {
-                Console.WriteLine("Mã ghế không hợp lệ!");
-                return; // Kết thúc việc thêm dữ liệu
-            }
-
-            // Kiểm tra tính hợp lệ của trạng thái ghế
-            bool isTrangThaiGheValid = KiemTraTrangThaiGhe(disInfor.MaGhe);
-            if (!isTrangThaiGheValid)
-            {
-                Console.WriteLine("Ghế đã được đặt trước đó!");
-                return; // Kết thúc việc thêm dữ liệu
-            }
-            // Tạo một đối tượng mới Ttdatve và gán giá trị từ disInforModel
             Ttdatve datVe = new Ttdatve
             {
-                MaDatVe = GenerateMaDatVe(), // Tự tạo mã đặt vé
-                NgayDat = DateTime.Now, // Ngày hiện tại
-                MaLichPhim = LayMaLichPhim(disInfor) // Lấy mã lịch phim từ disInforModel
+                MaDatVe = GenerateMaDatVe(),
+                NgayDat = disInfor.NgayDatVe,
+                MaLichPhim = LayMaLichPhim(disInfor)
             };
 
-            // Thêm datVe vào DbContext và lưu vào cơ sở dữ liệu
             _context.Ttdatves.Add(datVe);
             _context.SaveChanges();
+
             int maDatVe = datVe.MaDatVe;
+            var seatCodes = disInfor.MaGhe.Split(',');
 
-            Ctdatve ctdatve = new Ctdatve
+            if (seatCodes.Length >= 2)
             {
-
-                MaDatVe = maDatVe,
-                MaGhe = disInfor.MaGhe,
-                GiaVe = 80000,
-            };
-            _context.Ctdatves.Add(ctdatve);
-            _context.SaveChanges();
-            // Lấy lại đối tượng datVe từ cơ sở dữ liệu bằng mã đặt vé
-            Ctdatve insertedDatVe = _context.Ctdatves.FirstOrDefault(dv => dv.MaDatVe == datVe.MaDatVe);
-
-            if (insertedDatVe != null)
-            {
-
-
-                Thanhtoan thanhtoan = new Thanhtoan
+                foreach (var seatCode in seatCodes)
                 {
-                    MaThanhToan = GenerateMaThanhToan(),
-                    MaDatVe = maDatVe, // Use the obtained MaDatVe
-                    MaNhanVien = "NV001",
-                    NgayThanhToan = DateTime.Now,
-                    Phuongthucthanhtoan = disInfor.PhuongThucThanhToan,
-                };
+                    var existingCtdatve = _context.Ctdatves.Local.FirstOrDefault(ct => ct.MaDatVe == maDatVe && ct.MaGhe == seatCode);
 
-                // Thêm thanhtoan vào DbContext và lưu vào cơ sở dữ liệu
-                _context.Thanhtoans.Add(thanhtoan);
+                    if (existingCtdatve != null)
+                    {
+                        _context.Entry(existingCtdatve).State = EntityState.Detached;
+                    }
+
+                    Ctdatve ctdatve = new Ctdatve
+                    {
+                        MaDatVe = maDatVe,
+                        MaGhe = seatCode,
+                        GiaVe = 80000,
+                    };
+
+                    _context.Ctdatves.Add(ctdatve);
+                }
+
                 _context.SaveChanges();
             }
-           
-            // Tìm đối tượng Ghe và cập nhật trạng thái
-            Ghe ghe = _context.Ghes.FirstOrDefault(g => g.MaGhe == disInfor.MaGhe && g.MaPhong == disInfor.MaPhong);
-            Trangthaighe ttghe = new Trangthaighe
+            Thanhtoan thanhtoan = new Thanhtoan
             {
-                Maghe = disInfor.MaGhe,
-                MaPhong = disInfor.MaPhong,
-                TrangThai = 1,
-                MaLichChieu = LayMaLichChieu(disInfor)
-
+                MaThanhToan = GenerateMaThanhToan(),
+                MaDatVe = maDatVe, // Use the obtained MaDatVe
+                MaNhanVien = "NV001",
+                NgayThanhToan = disInfor.NgayDatVe,
+                Phuongthucthanhtoan = disInfor.PhuongThucThanhToan,
+                TongTienThanhToan = disInfor.tongtien
             };
-            // Thêm thanhtoan vào DbContext và lưu vào cơ sở dữ liệu
-            _context.Trangthaighes.Add(ttghe);
-            _context.SaveChanges();
 
+            // Thêm thanhtoan vào DbContext và lưu vào cơ sở dữ liệu
+            _context.Thanhtoans.Add(thanhtoan);
+            _context.SaveChanges();
+            // Tách các mã ghế thành một mảng
+            string[] maGhes = disInfor.MaGhe.Split(',');
+
+            // Duyệt qua từng mã ghế và thêm vào bảng Trangthaighe
+            foreach (var maGhe in maGhes)
+            {
+                // Trim các khoảng trắng ở đầu và cuối mã ghế
+                string trimmedMaGhe = maGhe.Trim();
+
+                if (string.IsNullOrEmpty(trimmedMaGhe))
+                    continue; // Bỏ qua mã ghế rỗng
+
+                // Tạo đối tượng Trangthaighe và gán giá trị
+                Trangthaighe trangThaiGhe = new Trangthaighe
+                {
+                    Maghe = trimmedMaGhe,
+                    MaPhong = disInfor.MaPhong,
+                    TrangThai = 1,
+                    MaLichChieu = LayMaLichChieu(disInfor)
+                };
+
+                // Thêm trangThaiGhe vào DbContext và lưu vào cơ sở dữ liệu
+                _context.Trangthaighes.Add(trangThaiGhe);
+                _context.SaveChanges();
+            }
         }
 
         public int GenerateMaDatVe()
@@ -162,28 +162,15 @@ namespace sell_movie.Services
             Console.WriteLine(lichchieu);
             if (lichchieu != null)
             {
-               
-               
-                    return lichchieu.MaLichChieu.ToString();
-               
+                return lichchieu.MaLichChieu.ToString();
             }
 
             // Trả về chuỗi rỗng hoặc một giá trị biểu thị rằng không tìm thấy mã lịch phim
             return string.Empty;
         }
-        public bool KiemTraMaGhe(string maGhe)
-        {
-            // Kiểm tra xem mã ghế có tồn tại trong bảng Ghế hay không
-            bool isMaGheValid = _context.Ghes.Any(g => g.MaGhe == maGhe);
-            return isMaGheValid;
-        }
-
-        public bool KiemTraTrangThaiGhe(string maGhe)
-        {
-            // Kiểm tra xem mã ghế có tồn tại trong bảng Trangthaighes và có trạng thái "Đã đặt" hay không
-            bool isTrangThaiGheValid = _context.Trangthaighes.Any(t => t.Maghe == maGhe && t.TrangThai == 1);
-            return !isTrangThaiGheValid; // Trả về true nếu mã ghế không có trạng thái "Đã đặt"
-        }
-
     }
 }
+
+
+
+    

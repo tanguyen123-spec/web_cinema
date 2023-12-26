@@ -14,6 +14,7 @@ namespace sell_movie.Services
         Task Update(string id, Phong entity);
         Task Delete(string id);
         Task DeleteGhe(string id);
+        Task<string> GetRoomCodeByRoomName(string roomName);
     }
     public class PhongServices : IPhongService
     {
@@ -100,6 +101,13 @@ namespace sell_movie.Services
             }
             await _context.SaveChangesAsync();
         }
+        public async Task<string> GetRoomCodeByRoomName(string roomName)
+        {
+            var phong = await _context.Phongs.FirstOrDefaultAsync(p => p.TenPhong == roomName);
+            return phong?.MaPhong;
+        }
+
+
 
     }
 }

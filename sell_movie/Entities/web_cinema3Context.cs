@@ -46,17 +46,15 @@ namespace sell_movie.Entities
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {   
-
-            
+        {
             modelBuilder.Entity<Ctdatve>(entity =>
             {
-                entity.HasKey(e => e.MaDatVe)
-                    .HasName("PK__ctdatve__6A32C59385766494");
-
                 entity.ToTable("ctdatve");
 
-                entity.Property(e => e.MaDatVe).ValueGeneratedNever();
+                entity.Property<int>("Id")
+                    .ValueGeneratedOnAdd();
+
+                entity.HasKey("Id");
 
                 entity.Property(e => e.MaGhe)
                     .HasMaxLength(255)
@@ -67,6 +65,12 @@ namespace sell_movie.Entities
                     .HasForeignKey(d => d.MaGhe)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__ctdatve__MaGhe__5812160E");
+
+                entity.HasOne(d => d.ttdatveNavigation)
+                    .WithMany()
+                    .HasForeignKey(d => d.MaDatVe)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__ctdatve__MaDatVe__5812160A");
             });
 
             modelBuilder.Entity<Ghe>(entity =>

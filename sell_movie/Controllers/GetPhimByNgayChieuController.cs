@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using sell_movie.Models;
 using sell_movie.Services;
+using System.Data;
 
 namespace sell_movie.Controllers
 {
@@ -15,6 +17,7 @@ namespace sell_movie.Controllers
             _service = service;
         }
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<List<PhimGioChieu>>> GetPhimGioChieuByNgayChieu(DateTime ngayChieu)
         {
             var phim = new GetPhimByIDNgayChieumodels

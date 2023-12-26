@@ -24,10 +24,16 @@ namespace sell_movie.Migrations
 
             modelBuilder.Entity("sell_movie.Entities.Ctdatve", b =>
                 {
-                    b.Property<int>("MaDatVe")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
                     b.Property<int>("GiaVe")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MaDatVe")
                         .HasColumnType("int");
 
                     b.Property<string>("MaGhe")
@@ -36,8 +42,9 @@ namespace sell_movie.Migrations
                         .IsUnicode(false)
                         .HasColumnType("varchar(255)");
 
-                    b.HasKey("MaDatVe")
-                        .HasName("PK__ctdatve__6A32C59385766494");
+                    b.HasKey("Id");
+
+                    b.HasIndex("MaDatVe");
 
                     b.HasIndex("MaGhe");
 
@@ -422,6 +429,9 @@ namespace sell_movie.Migrations
                         .HasColumnType("varchar(255)")
                         .HasColumnName("phuongthucthanhtoan");
 
+                    b.Property<int>("TongTienThanhToan")
+                        .HasColumnType("int");
+
                     b.HasKey("MaThanhToan")
                         .HasName("PK__thanhtoa__D4B2584496E304E5");
 
@@ -544,6 +554,12 @@ namespace sell_movie.Migrations
 
             modelBuilder.Entity("sell_movie.Entities.Ctdatve", b =>
                 {
+                    b.HasOne("sell_movie.Entities.Ttdatve", "ttdatveNavigation")
+                        .WithMany()
+                        .HasForeignKey("MaDatVe")
+                        .IsRequired()
+                        .HasConstraintName("FK__ctdatve__MaDatVe__5812160A");
+
                     b.HasOne("sell_movie.Entities.Ghe", "MaGheNavigation")
                         .WithMany("Ctdatves")
                         .HasForeignKey("MaGhe")
@@ -551,6 +567,8 @@ namespace sell_movie.Migrations
                         .HasConstraintName("FK__ctdatve__MaGhe__5812160E");
 
                     b.Navigation("MaGheNavigation");
+
+                    b.Navigation("ttdatveNavigation");
                 });
 
             modelBuilder.Entity("sell_movie.Entities.Ghe", b =>
@@ -634,7 +652,7 @@ namespace sell_movie.Migrations
 
             modelBuilder.Entity("sell_movie.Entities.Thanhtoan", b =>
                 {
-                    b.HasOne("sell_movie.Entities.Ctdatve", "MaDatVeNavigation")
+                    b.HasOne("sell_movie.Entities.Ttdatve", "MaDatVeNavigation")
                         .WithMany("Thanhtoans")
                         .HasForeignKey("MaDatVe")
                         .IsRequired()
@@ -700,11 +718,6 @@ namespace sell_movie.Migrations
                     b.Navigation("nguoidung");
                 });
 
-            modelBuilder.Entity("sell_movie.Entities.Ctdatve", b =>
-                {
-                    b.Navigation("Thanhtoans");
-                });
-
             modelBuilder.Entity("sell_movie.Entities.Ghe", b =>
                 {
                     b.Navigation("Ctdatves");
@@ -747,6 +760,11 @@ namespace sell_movie.Migrations
             modelBuilder.Entity("sell_movie.Entities.Theloai", b =>
                 {
                     b.Navigation("Phims");
+                });
+
+            modelBuilder.Entity("sell_movie.Entities.Ttdatve", b =>
+                {
+                    b.Navigation("Thanhtoans");
                 });
 #pragma warning restore 612, 618
         }

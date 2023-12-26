@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using sell_movie.Entities;
 using sell_movie.Models;
 using sell_movie.Services;
+using System.Data;
 
 namespace sell_movie.Controllers
 {
@@ -16,7 +18,8 @@ namespace sell_movie.Controllers
                 this.services = services;
             }
             [HttpGet]
-            public async Task<IActionResult> GetAll()
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> GetAll()
             {
                 var lcp = await services.GetAll();
                 return Ok(lcp);

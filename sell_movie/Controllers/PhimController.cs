@@ -5,6 +5,8 @@ using sell_movie.Models;
 using sell_movie.Services;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Authorization;
+using System.Data;
 
 namespace sell_movie.Controllers
 {
@@ -20,6 +22,7 @@ namespace sell_movie.Controllers
             this._env = env;
         }
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetAll()
         {
             var result = await services_.GetAll();
@@ -27,8 +30,9 @@ namespace sell_movie.Controllers
             {
                 foreach (var item in result)
                 {
+                    item.Banner = GetBannerByPhim(item.MaPhim);
                     item.Anh = GetImageByPhim(item.MaPhim);
-                    await services_.UpdateImageUrl(item.MaPhim, item.Anh);
+                    await services_.UpdateImageUrl(item.MaPhim, item.Anh, item.Banner);
                 }
             }
             else
@@ -71,13 +75,40 @@ namespace sell_movie.Controllers
             // Gọi phương thức GetImageByPhim để lấy đường dẫn ảnh đúng
             if (!string.IsNullOrEmpty(phim.MaPhim))
             {
+                string bannerUrl = GetBannerByPhim(phim.MaPhim);
                 string imageUrl = GetImageByPhim(phim.MaPhim);
-                await services_.UpdateImageUrl(phim.MaPhim, imageUrl);
+                await services_.UpdateImageUrl(phim.MaPhim, imageUrl, bannerUrl);
             }
 
             return Ok(phim);
         }
+        [HttpGet("now-playing")]
+        public async Task<IActionResult> GetNowPlayingMovies()
+        {
+            try
+            {
+                var nowPlayingMovies = await services_.GetNowPlayingMovies();
+                return Ok(nowPlayingMovies);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred: {ex.Message}");
+            }
+        }
 
+        [HttpGet("upcoming")]
+        public async Task<IActionResult> GetUpcomingMovies()
+        {
+            try
+            {
+                var upcomingMovies = await services_.GetUpcomingMovies();
+                return Ok(upcomingMovies);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred: {ex.Message}");
+            }
+        }
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(string id, [FromBody] PhimModels phim)
         {
@@ -178,6 +209,67 @@ namespace sell_movie.Controllers
             }
             return ImageUrl;
         }
+        [HttpPost("UploadBanner")]
+        public async Task<ActionResult> UploadBanner()
+        {
+            try
+            {
+                var uploadFiles = Request.Form.Files;
+                foreach (IFormFile source in uploadFiles)
+                {
+                    string filename = source.FileName;
+                    string filepath = GetBannerPath(filename);
 
+                    if (!System.IO.Directory.Exists(filepath))
+                    {
+                        System.IO.Directory.CreateDirectory(filepath);
+                    }
+                    string bannerPath = filepath + "\\banner.png";
+                    if (System.IO.File.Exists(bannerPath))
+                    {
+                        System.IO.File.Delete(bannerPath);
+                    }
+                    using (FileStream stream = System.IO.File.Create(bannerPath))
+                    {
+                        await source.CopyToAsync(stream)
+        ;
+                    }
+
+                    // Trả về đường dẫn banner đã tải lên thành công
+                    string bannerUrl = "http://localhost:5110/Uploads/Phim/" + filename + "/banner.png";
+                    return Ok(bannerUrl);
+                }
+            }
+            catch (Exception ex)
+            {
+                // Xử lý ngoại lệ (exception) ở đây
+            }
+
+            return BadRequest("Failed to upload banner.");
+        }
+
+        [NonAction]
+        private string GetBannerPath(string phimCode)
+        {
+            return this._env.WebRootPath + "\\Uploads\\Phim\\" + phimCode;
+        }
+
+        [NonAction]
+        private string GetBannerByPhim(string phimCode)
+        {
+            string bannerUrl = string.Empty;
+            string hostUrl = "http://localhost:5110/";
+            string filepath = GetBannerPath(phimCode);
+            string bannerPath = filepath + "\\banner.png";
+            if (!System.IO.File.Exists(bannerPath))
+            {
+                bannerUrl = hostUrl + "/Uploads/common/nobanner.jpg";
+            }
+            else
+            {
+                bannerUrl = hostUrl + "/Uploads/Phim/" + phimCode + "/banner.png";
+            }
+            return bannerUrl;
+        }
     }
 }

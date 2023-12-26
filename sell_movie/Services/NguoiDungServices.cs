@@ -12,6 +12,7 @@ namespace sell_movie.Services
         Task CreatebyModels(NguoidungModels nguoidung);
         Task Update(string id, Nguoidung entity);
         Task Delete(string id);
+        Task UpdateByModel(string id, NguoidungModels nguoidung);
     }
     public class NguoiDungServices : INguoiDungService
     {
@@ -60,6 +61,24 @@ namespace sell_movie.Services
 
         };
             context_.Nguoidungs.Add(nd);
+            await context_.SaveChangesAsync();
+        }
+        public async Task UpdateByModel(string id, NguoidungModels nguoidung)
+        {
+            var entity = await context_.Nguoidungs.FindAsync(id);
+            if (entity == null)
+            {
+                // Xử lý khi không tìm thấy người dùng với id tương ứng
+                return;
+            }
+
+            // Cập nhật các thuộc tính của entity từ nguoidung
+            entity.Username = nguoidung.Username;
+            entity.Password = nguoidung.Password;
+            entity.Email = nguoidung.Email;
+            entity.Role = nguoidung.Role;
+            entity.MaNhanVien = nguoidung.MaNhanVien;
+
             await context_.SaveChangesAsync();
         }
     }

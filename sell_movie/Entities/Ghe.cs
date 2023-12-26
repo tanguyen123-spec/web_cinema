@@ -17,5 +17,6 @@ namespace sell_movie.Entities
         [JsonIgnore]
         public virtual Phong MaPhongNavigation { get; set; } = null!;
         public virtual ICollection<Ctdatve> Ctdatves { get; set; }
+
     }
 }

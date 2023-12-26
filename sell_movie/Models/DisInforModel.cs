@@ -8,13 +8,13 @@
         public int Gio { get; set; }
         public int Phut { get; set; }
 
-        public TimeSpan GioChieu
-        {
-            get { return new TimeSpan(Gio, Phut, 0); }
-        }
         public string MaPhong { get; set; }
         public int SoLuong { get; set; }
+        public int SoLuongNglon { get; set; }
+        public int SoluongU22 { get; set; }
         public string MaGhe { get; set; }
+        public int tongtien { get; set; }
+
         public string PhuongThucThanhToan { get; set; }
 
         public DisInforModel()

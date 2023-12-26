@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using sell_movie.Models;
 using sell_movie.Services;
+using System.Data;
 
 namespace sell_movie.Controllers
 {
@@ -17,6 +19,7 @@ namespace sell_movie.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public IActionResult ThemDatVe([FromBody] DisInforModel disInfor)
         {
             if (disInfor == null)

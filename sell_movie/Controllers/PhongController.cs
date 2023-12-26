@@ -6,6 +6,8 @@ using System.Xml.Linq;
 using sell_movie.Entities;
 using sell_movie.Models;
 using sell_movie.Services;
+using Microsoft.AspNetCore.Authorization;
+using System.Data;
 
 [Route("api/[controller]")]
 [ApiController]
@@ -19,6 +21,7 @@ public class PhongController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> GetAll()
     {
         var phongs = await _services.GetAll();
@@ -67,5 +70,15 @@ public class PhongController : ControllerBase
     {
         await _services.DeleteGhe(id);
         return Ok();
+    }
+    [HttpGet("roomCodeByRoomName/{roomName}")]
+    public async Task<IActionResult> GetRoomCodeByRoomName(string roomName)
+    {
+        var roomCode = await _services.GetRoomCodeByRoomName(roomName);
+        if (roomCode == null)
+        {
+            return NotFound();
+        }
+        return Ok(roomCode);
     }
 }

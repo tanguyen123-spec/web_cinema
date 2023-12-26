@@ -14,7 +14,7 @@ namespace sell_movie.Services
         Task CreatebyModels(CtdatveModels ctdatve);
         Task Update(string id, Ctdatve entity);
         Task Delete(string id);
-
+        Task<CtdatveDtocs> GetByMaDatVe(int maDatVe);
     }
     public class Ctdatveservice : ICtDatVeService
     {
@@ -60,6 +60,24 @@ namespace sell_movie.Services
             };
             _context.Ctdatves.Add(ct);
             await _context.SaveChangesAsync();
+        }
+        public async Task<CtdatveDtocs> GetByMaDatVe(int maDatVe)
+        {
+            var ctdatve = await _context.Ctdatves.FirstOrDefaultAsync(ct => ct.MaDatVe == maDatVe);
+
+            if (ctdatve == null)
+            {
+                return null;
+            }
+
+            var ctdatveDto = new CtdatveDtocs
+            {
+                MaDatVe = ctdatve.MaDatVe,
+                MaGhe = ctdatve.MaGhe,
+                GiaVe = ctdatve.GiaVe
+            };
+
+            return ctdatveDto;
         }
     }
 }

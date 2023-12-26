@@ -33,7 +33,15 @@ namespace sell_movie.Services
 
         public async Task Delete(string id)
         {
-            await _repository.Delete(id);
+            if (!int.TryParse(id, out int maDatVe))
+            {
+                // Handle invalid id format
+                // For example, throw an exception or return an error response
+                return;
+            }
+
+            string maDatVeString = maDatVe.ToString();
+            await _repository.Delete(maDatVeString);
         }
 
         public async Task<IEnumerable<Ttdatve>> GetAll()
@@ -43,7 +51,15 @@ namespace sell_movie.Services
 
         public async Task<Ttdatve> GetById(string id)
         {
-            return await _repository.GetById(id);
+            if (!int.TryParse(id, out int maDatVe))
+            {
+                // Handle invalid id format
+                // For example, throw an exception or return an error response
+                return null;
+            }
+
+            string maDatVeString = maDatVe.ToString();
+            return await _repository.GetById(maDatVeString);
         }
 
         public async Task Update(string id, Ttdatve entity)

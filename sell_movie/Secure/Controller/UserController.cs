@@ -29,32 +29,24 @@ namespace sell_movie.Secure.Controller
         {
             //kiểm tra có tài khoản trong dbAccount có trùng vs acc 
             //mà người dùng nhập hay không
-            try
+            var account = context_.Nguoidungs.SingleOrDefault(p => p.Email == model.Email
+            && p.Password == model.Passwords);
+            if (account == null)
             {
-                var account = context_.Nguoidungs.SingleOrDefault(p => p.Email == model.Email
-           && p.Password == model.Passwords);
-                if (account == null)
-                {
-                    return Ok(new ApiResponse
-                    {
-                        Success = false,
-                        Message = "Invalid username/password"
-                    });
-                }
-                //cấp token
-                var token = await GeneratedToken(account);
                 return Ok(new ApiResponse
                 {
-                    Success = true,
-                    Message = "Authenticate success",
-                    Data = token
+                    Success = false,
+                    Message = "Invalid username/password"
                 });
             }
-            catch (Exception ex)
+            //cấp token
+            var token = await GeneratedToken(account);
+            return Ok(new ApiResponse
             {
-                return BadRequest(ex);
-            }
-           
+                Success = true,
+                Message = "Authenticate success",
+                Data = token
+            });
         }
 
         //GeneratedToken tạo ra 1 cặp token(access và refresh)
@@ -71,17 +63,18 @@ namespace sell_movie.Secure.Controller
                 Subject = new ClaimsIdentity(new[]
                 {
                    // Thêm claim "UserName" với giá trị là tên người dùng từ đối tượng Account
-                    //new Claim("username", account.Username),
+                    new Claim("UserName", account.Username),
+                    //theem claim Email
                     new Claim(JwtRegisteredClaimNames.Email, account.Email),
                     //Jti được set bằng Guid để xác định token là duy nhất
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                    
+                    new Claim("Role", account.Role.ToString()),
+                    new Claim("MaNhanVien", account.MaNhanVien.ToString()),
                     //roles
-                    new Claim (ClaimTypes.Role, account.Username),
                
                 }),
                 // Token sẽ hết hạn sau một khoảng thời gian 
-                Expires = DateTime.UtcNow.AddMinutes(5),
+                Expires = DateTime.UtcNow.AddMinutes(20),
                 // Đặt thuật toán và khóa để ký và xác thực token
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey
                (secretkeyBytes), SecurityAlgorithms.HmacSha256Signature)

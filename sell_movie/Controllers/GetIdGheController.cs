@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using sell_movie.Models;
 using sell_movie.Services;
+using System.Data;
 
 namespace sell_movie.Controllers
 {
@@ -16,6 +18,7 @@ namespace sell_movie.Controllers
             _Service = Service;
         }
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetGheByTenPhimVaGioChieu(string tenPhim, DateTime gioChieu)
         {
             // Tạo một đối tượng GeTGhemodel từ các tham số đầu vào

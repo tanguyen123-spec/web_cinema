@@ -14,7 +14,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Options;
 using Microsoft.EntityFrameworkCore;
-using sell_movie.Secure.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
@@ -66,7 +65,6 @@ builder.Services.AddScoped<INhanVienService, NhanVienServices>();
 builder.Services.AddScoped<IGetIDGheService, GetIdGheService>();
 builder.Services.AddScoped<IQuocGiaService, QuocGiaServices>();
 builder.Services.AddScoped<IThanhToanService,ThanhToanServices>();
-builder.Services.AddScoped<ITokenServices,TokenServices>();
 builder.Services.Configure<AppSetting>(builder.Configuration.GetSection("AppSettings"));
 optionsBuilder.EnableSensitiveDataLogging();
 

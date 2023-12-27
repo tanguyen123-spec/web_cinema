@@ -70,8 +70,9 @@ namespace sell_movie.Secure.Controller
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                     new Claim("Role", account.Role.ToString()),
                     new Claim("MaNhanVien", account.MaNhanVien.ToString()),
+
                     //roles
-               
+                    new Claim (ClaimTypes.Role,account.Username),
                 }),
                 // Token sẽ hết hạn sau một khoảng thời gian 
                 Expires = DateTime.UtcNow.AddMinutes(20),
